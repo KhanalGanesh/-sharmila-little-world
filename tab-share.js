@@ -2,7 +2,7 @@
 /* =========================================
    SHARE WITH GANESH ♡
    SHARMILA'S LITTLE WORLD
-   URL-BASED REPORT SHARING
+   COMPACT URL REPORT SHARING
    NO FIREBASE / NO API
 ========================================= */
 
@@ -268,59 +268,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Only selected answers from the current tab.
+  // Compact report: only selected answers.
   function buildReport(tab) {
     const state = readState();
+    const lines = [];
 
-    const lines = [
-      "♡ SHARMILA'S LITTLE WORLD ♡",
-      `My ${tab.title} Report`,
-      "━━━━━━━━━━━━━━━━━━━━"
-    ];
+    lines.push(`♡SHARMILA'S LITTLE WORLD♡`);
+    lines.push(`My ${tab.title} Report`);
 
     const answers = state.answers?.[tab.id];
 
     if (Array.isArray(answers)) {
       answers.forEach(answer => {
         const value = clean(answer);
-        if (value) lines.push(`♡ ${value}`);
+        if (value) lines.push(value);
       });
     } else if (answers && typeof answers === "object") {
       Object.entries(answers).forEach(([topic, answer]) => {
         const value = clean(answer);
-        if (value) lines.push(`♡ ${topic}: ${value}`);
+        if (value) lines.push(`${topic}: ${value}`);
       });
     } else if (answers) {
       const value = clean(answers);
-      if (value) lines.push(`♡ ${value}`);
+      if (value) lines.push(value);
     }
 
     // Moments: saved memories only.
     if (tab.id === "moments") {
-      const memories = state.memories || [];
-
-      memories.forEach(memory => {
+      (state.memories || []).forEach(memory => {
         if (memory.title || memory.text) {
-          const date = memory.date ? ` (${memory.date})` : "";
           lines.push(
-            `♡ ${memory.title || "Memory"}${date}: ${memory.text || ""}`
+            `${memory.title || "Memory"}${memory.date ? ` (${memory.date})` : ""}: ${memory.text || ""}`
           );
         }
       });
     }
 
-    // Diary is never included.
-    lines.push("━━━━━━━━━━━━━━━━━━━━");
     lines.push("Made with love ♡");
 
     return lines.join("\n");
   }
 
+  // URL contains the report, no database needed.
   function generateReportLink(report) {
     const baseURL =
       window.location.origin +
-      window.location.pathname +
-      window.location.search;
+      window.location.pathname;
 
     return baseURL + "#shared-report=" + encodeURIComponent(report);
   }
@@ -374,29 +367,37 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch (error) {
-      const textarea = document.createElement("textarea");
-      textarea.value = text;
-      textarea.style.position = "fixed";
-      textarea.style.left = "-9999px";
-
-      document.body.appendChild(textarea);
-      textarea.select();
-
-      let copied = false;
-
+    // Try modern clipboard first.
+    if (navigator.clipboard && window.isSecureContext) {
       try {
-        copied = document.execCommand("copy");
-      } catch {
-        copied = false;
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (error) {
+        // Continue to fallback.
       }
-
-      textarea.remove();
-      return copied;
     }
+
+    // Fallback for supported browsers.
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    textarea.style.top = "0";
+
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+
+    let copied = false;
+
+    try {
+      copied = document.execCommand("copy");
+    } catch {
+      copied = false;
+    }
+
+    textarea.remove();
+    return copied;
   }
 
   function createPanel(tab) {
@@ -478,9 +479,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ? "♡ Close sharing preview"
         : "♡ Share with Ganesh";
 
-      if (isOpen) {
-        updatePreview();
-      }
+      if (isOpen) updatePreview();
     });
 
     page.addEventListener("change", () => {
@@ -491,15 +490,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     copyButton.addEventListener("click", async () => {
       if (!linkBox.value) {
-        status.textContent = "Please generate your report link first. ♡";
+        status.textContent = "Generate your report link first. ♡";
         return;
       }
 
       const copied = await copyText(linkBox.value);
 
       status.textContent = copied
-        ? "♡ Report link copied! Now paste it into Messenger."
-        : "Please select and copy the link shown above.";
+        ? "♡ Link copied! Paste it into Messenger."
+        : "Please select and copy the link manually.";
     });
 
     sendButton.addEventListener("click", async () => {
@@ -514,26 +513,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const reportLink = generateReportLink(report);
 
-      // Show the generated link on the page.
       linkBox.value = reportLink;
       linkBox.style.display = "block";
       copyButton.style.display = "block";
 
-      // Open Messenger from the user's button click.
+      // Open Messenger immediately.
       const messengerWindow = window.open(
         MESSENGER_URL,
         "_blank"
       );
 
+      // Automatically try copying the link.
       const copied = await copyText(reportLink);
 
-      if (copied) {
-        status.textContent =
-          "♡ Report link generated and copied! Paste it into Messenger and send.";
-      } else {
-        status.textContent =
-          "♡ Report link generated! Copy the link shown above and send it in Messenger.";
-      }
+      status.textContent = copied
+        ? "♡ Link copied! Paste it into Messenger and send."
+        : "♡ Link ready! Copy it using the button above.";
 
       if (!messengerWindow) {
         status.textContent +=
