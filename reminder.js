@@ -1,472 +1,691 @@
 
 /* =========================================
-   TIME TO TALK WITH GANESH ♡
-   Romantic Reminder System
-   By Ganesh
+   SHARMILA'S LITTLE WORLD
+   OUR LITTLE REMINDER ♡
+   AUTOMATIC + CHOOSE A TIME
+   MESSENGER + INSTAGRAM
 ========================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-
   if (document.getElementById("ganeshReminder")) return;
 
-  const STORAGE_KEY = "ganeshRomanticReminder";
+  const MODE_KEY = "ganeshReminderMode";
+  const TIME_KEY = "ganeshRomanticReminder";
+  const NEXT_KEY = "ganeshAutoReminderNextAt";
+
+  const MESSENGER_URL = "https://m.me/ohh.you.copy.my.profile.link";
+  const INSTAGRAM_URL = "https://www.instagram.com/mrkhanal12/";
+
+  const messages = [
+    "How was your day today? ♡",
+    "Have you eaten something?",
+    "Are you smiling right now? 😊",
+    "Don't forget to take a little rest.",
+    "What made you happy today?",
+    "Missing someone? 🤭",
+    "You deserve a beautiful day!",
+    "Time to chat with Ganesh ♡",
+    "He wants to talk to you, babe ❤️"
+  ];
+
+  let popupTimer = null;
+  let autoTimer = null;
+
+  let mode = localStorage.getItem(MODE_KEY) || "auto";
+
+  /* ---------- STYLES ---------- */
 
   const style = document.createElement("style");
-  style.textContent = `
-    #ganeshReminder, #ganeshReminder * {
-      box-sizing: border-box;
-    }
 
+  style.textContent = `
     #ganeshReminder {
       position: fixed;
-      z-index: 999999;
-      right: 22px;
-      bottom: 24px;
-      font-family: inherit;
-    }
-
-    #grBell {
-      width: 57px;
-      height: 57px;
-      border: none;
-      border-radius: 50%;
-      background: linear-gradient(135deg,#f7a8c8,#d86b9c);
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      box-shadow: 0 7px 25px #d86b9c55;
-      transition: .3s;
-    }
-
-    #grBell:hover {
-      transform: scale(1.1) rotate(-8deg);
+      right: 82px;
+      bottom: 25px;
+      z-index: 99990;
+      font-family: Arial, sans-serif;
     }
 
     #grPanel {
       display: none;
       position: absolute;
       right: 0;
-      bottom: 70px;
-      width: min(340px, calc(100vw - 32px));
-      padding: 22px;
-      border-radius: 22px;
-      background: #fff8fb;
-      color: #75465d;
-      box-shadow: 0 12px 45px #8e466a35;
-      border: 1px solid #f5d5e3;
-      animation: grPop .35s ease;
+      bottom: 65px;
+      width: 290px;
+      padding: 17px;
+      border-radius: 18px;
+      background: #fff7fb;
+      border: 1px solid #f3c5d8;
+      box-shadow: 0 8px 30px rgba(160,70,110,.18);
+      color: #70445a;
+      box-sizing: border-box;
     }
 
     #grPanel.gr-show {
       display: block;
+      animation: grAppear .2s ease;
     }
 
     #grPanel h3 {
-      margin: 0 0 7px;
-      color: #b65380;
-      font-size: 19px;
+      margin: 0 0 12px;
+      font-size: 16px;
+      color: #d65b91;
     }
 
     #grPanel p {
-      font-size: 13px;
-      line-height: 1.6;
-      margin: 0 0 16px;
-      color: #966b80;
-    }
-
-    #grPanel label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      margin: 12px 0 6px;
-    }
-
-    #grPanel input,
-    #grPanel select {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #edc7d8;
-      border-radius: 11px;
-      background: white;
-      color: #75465d;
-      font-size: 15px;
-      outline: none;
-    }
-
-    #grSave {
-      width: 100%;
-      margin-top: 17px;
-      padding: 12px;
-      border: none;
-      border-radius: 30px;
-      background: linear-gradient(135deg,#ee9cbe,#d86b9c);
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    #grCancel {
-      width: 100%;
-      margin-top: 8px;
-      padding: 9px;
-      border: 1px solid #edc7d8;
-      border-radius: 30px;
-      background: transparent;
-      color: #a65c7e;
-      cursor: pointer;
-    }
-
-    #grStatus {
       font-size: 12px;
-      margin-top: 12px;
-      color: #a65c7e;
       line-height: 1.5;
+      margin: 0 0 12px;
+    }
+
+    .gr-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      margin: 7px 0;
+      border-radius: 10px;
+      background: white;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .gr-option input {
+      accent-color: #e779a7;
+    }
+
+    #grTimeBox {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    #grTimeBox.gr-visible {
+      display: block;
+    }
+
+    #grTimeBox label {
+      display: block;
+      margin: 8px 0 4px;
+      font-size: 12px;
+    }
+
+    #grTimeBox input,
+    #grTimeBox select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #edc4d6;
+      border-radius: 8px;
+      box-sizing: border-box;
+      background: white;
+      color: #70445a;
+    }
+
+    .gr-save,
+    .gr-off {
+      width: 100%;
+      border: 0;
+      border-radius: 20px;
+      padding: 10px;
+      margin-top: 9px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .gr-save {
+      background: #e779a7;
+      color: white;
+    }
+
+    .gr-off {
+      background: #f4e5ec;
+      color: #a15c7b;
     }
 
     #grPopup {
       display: none;
       position: fixed;
-      z-index: 1000000;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      width: min(370px, calc(100vw - 20px));
-      padding: 23px;
-      background: linear-gradient(145deg,#fff8fc,#ffe9f2);
-      color: #75465d;
-      border: 1px solid #f3c7da;
-      border-radius: 23px 0 0 23px;
-      box-shadow: 0 10px 45px #9c52754d;
+      right: 82px;
+      bottom: 95px;
+      width: 270px;
+      padding: 16px;
+      border-radius: 18px;
+      background: #fff7fb;
+      border: 1px solid #f2bfd4;
+      box-shadow: 0 8px 30px rgba(160,70,110,.2);
+      z-index: 99999;
+      color: #70445a;
+      text-align: center;
+      box-sizing: border-box;
     }
 
-    #grPopup.gr-active {
+    #grPopup.gr-show {
       display: block;
-      animation: grSlide .65s cubic-bezier(.2,.8,.2,1);
+      animation: grAppear .25s ease;
     }
 
     #grPopup .gr-heart {
-      font-size: 32px;
-      margin-bottom: 8px;
-      animation: grBeat 1.2s infinite;
+      font-size: 25px;
+      margin-bottom: 5px;
     }
 
-    #grPopup h2 {
-      font-size: 20px;
-      line-height: 1.4;
-      color: #bd5d89;
-      margin: 5px 0 9px;
-    }
-
-    #grPopup p {
+    #grPopup .gr-message {
       font-size: 14px;
-      line-height: 1.7;
-      color: #91677d;
-      margin: 0 0 17px;
+      line-height: 1.5;
+      margin: 5px 0 13px;
+      font-weight: bold;
     }
 
-    .gr-actions {
+    .gr-social-links {
       display: flex;
       gap: 9px;
+      margin-top: 8px;
     }
 
-    .gr-actions button {
+    .gr-social-link {
       flex: 1;
-      padding: 11px 8px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 5px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: bold;
+      background: white;
+      border: 1px solid #f0c5d8;
+      color: #70445a;
+      transition: transform .2s, box-shadow .2s;
     }
 
-    #grTalk {
-      background: #dc80a7;
-      color: white;
+    .gr-social-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(160,70,110,.15);
+    }
+
+    .gr-social-link img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
     }
 
     #grLater {
-      background: #f5dce8;
-      color: #9c5677;
+      width: 100%;
+      padding: 9px;
+      border: 0;
+      border-radius: 20px;
+      margin-top: 9px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      background: #f4e5ec;
+      color: #a15c7b;
     }
 
-    @keyframes grSlide {
-      from { right: -400px; opacity: 0; }
-      to { right: 0; opacity: 1; }
+    @keyframes grAppear {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    @keyframes grPop {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes grBeat {
-      0%,100% { transform: scale(1); }
-      50% { transform: scale(1.18); }
-    }
-
-    @media(max-width:480px) {
-      #ganeshReminder {
-        right: 14px;
-        bottom: 17px;
+    @media(max-width: 600px) {
+      #grPanel {
+        width: 270px;
+        right: -5px;
       }
 
       #grPopup {
-        top: auto;
-        bottom: 85px;
-        right: 10px;
-        transform: none;
-        border-radius: 22px;
+        width: 250px;
+        right: 0;
+        bottom: 90px;
       }
     }
   `;
+
   document.head.appendChild(style);
+
+  /* ---------- CREATE REMINDER UI ---------- */
 
   const wrapper = document.createElement("div");
   wrapper.id = "ganeshReminder";
 
   wrapper.innerHTML = `
     <div id="grPanel">
+
       <h3>Our Little Reminder ♡</h3>
-      <p>Set a special time to talk with Ganesh. I'll be waiting! 💗</p>
+      <p>A little reminder to make her smile 💗</p>
 
-      <label for="grTime">Choose your time</label>
-      <input type="time" id="grTime" value="20:00">
+      <label class="gr-option">
+        <input type="radio" name="grMode" value="auto">
+        Automatic reminders
+      </label>
 
-      <label for="grRepeat">Reminder type</label>
-      <select id="grRepeat">
-        <option value="daily">Every day ♡</option>
-        <option value="once">One time only</option>
-      </select>
+      <label class="gr-option">
+        <input type="radio" name="grMode" value="time">
+        Choose a time
+      </label>
 
-      <button id="grSave">Save My Reminder ♡</button>
-      <button id="grCancel">Turn Off Reminder</button>
+      <div id="grTimeBox">
+        <label>Reminder type</label>
+        <select id="grRepeat">
+          <option value="daily">Every day</option>
+          <option value="once">One time</option>
+        </select>
 
-      <div id="grStatus">No reminder set yet.</div>
+        <label>Date</label>
+        <input type="date" id="grDate">
+
+        <label>Time</label>
+        <input type="time" id="grTime">
+
+        <button class="gr-save" id="grSaveTime">
+          Save Reminder ♡
+        </button>
+      </div>
+
+      <button class="gr-off" id="grTurnOff">
+        Turn Off Reminders
+      </button>
+
     </div>
 
-    <button id="grBell" title="Set a reminder">♡</button>
+    <div id="grPopup">
+
+      <div class="gr-heart">💗</div>
+
+      <div class="gr-message" id="grMessage"></div>
+
+      <div class="gr-social-links">
+
+        <a
+          class="gr-social-link"
+          href="${MESSENGER_URL}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="https://cdn.simpleicons.org/messenger/0084FF"
+            alt="Messenger"
+          >
+          Messenger
+        </a>
+
+        <a
+          class="gr-social-link"
+          href="${INSTAGRAM_URL}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="https://cdn.simpleicons.org/instagram/E4405F"
+            alt="Instagram"
+          >
+          Instagram
+        </a>
+
+      </div>
+
+      <button id="grLater">Later ♡</button>
+
+    </div>
   `;
 
   document.body.appendChild(wrapper);
 
-  const popup = document.createElement("div");
-  popup.id = "grPopup";
-
-  popup.innerHTML = `
-    <div class="gr-heart">💗</div>
-    <h2>It's time to talk with Ganesh!</h2>
-    <p>
-      Hey babe, someone is waiting to hear your voice.
-      Aba ali ber kura garne hoina? 🥺💕
-    </p>
-    <div class="gr-actions">
-      <button id="grTalk">Let's Talk ❤️</button>
-      <button id="grLater">Later ♡</button>
-    </div>
-  `;
-
-  document.body.appendChild(popup);
-
-  const bell = document.getElementById("grBell");
   const panel = document.getElementById("grPanel");
-  const timeInput = document.getElementById("grTime");
-  const repeatInput = document.getElementById("grRepeat");
-  const status = document.getElementById("grStatus");
+  const popup = document.getElementById("grPopup");
+  const timeBox = document.getElementById("grTimeBox");
 
-  let reminder = null;
+  /* ---------- SOUND ---------- */
 
-  try {
-    reminder = JSON.parse(localStorage.getItem(STORAGE_KEY));
-  } catch {
-    reminder = null;
-  }
+  function playReminderSound() {
+    try {
+      const AudioContext =
+        window.AudioContext || window.webkitAudioContext;
 
-  function nextTime(time) {
-    const [hours, minutes] = time.split(":").map(Number);
-    const date = new Date();
+      if (!AudioContext) return;
 
-    date.setHours(hours, minutes, 0, 0);
+      const audio = new AudioContext();
 
-    if (date.getTime() <= Date.now()) {
-      date.setDate(date.getDate() + 1);
-    }
+      [523.25, 659.25, 783.99].forEach((frequency, index) => {
+        const oscillator = audio.createOscillator();
+        const gain = audio.createGain();
 
-    return date.getTime();
-  }
+        oscillator.type = "sine";
+        oscillator.frequency.value = frequency;
 
-  function updateStatus() {
-    if (!reminder || !reminder.active) {
-      status.textContent = "No reminder set yet.";
-      return;
-    }
+        gain.gain.setValueAtTime(0.001, audio.currentTime);
 
-    const date = new Date(reminder.nextAt);
+        gain.gain.exponentialRampToValueAtTime(
+          0.12,
+          audio.currentTime + 0.05 + index * 0.02
+        );
 
-    status.textContent =
-      "♡ Reminder set for " +
-      date.toLocaleString([], {
-        weekday: "short",
-        hour: "2-digit",
-        minute: "2-digit"
-      }) +
-      (reminder.repeat === "daily" ? " · Every day" : " · One time");
-  }
+        gain.gain.exponentialRampToValueAtTime(
+          0.001,
+          audio.currentTime + 0.45 + index * 0.02
+        );
 
-  function saveReminder() {
-    const time = timeInput.value;
+        oscillator.connect(gain);
+        gain.connect(audio.destination);
 
-    if (!time) {
-      status.textContent = "Please choose a time first ♡";
-      return;
-    }
+        oscillator.start(audio.currentTime + index * 0.12);
+        oscillator.stop(audio.currentTime + 0.6 + index * 0.12);
+      });
 
-    reminder = {
-      active: true,
-      time,
-      repeat: repeatInput.value,
-      nextAt: nextTime(time)
-    };
+      setTimeout(() => audio.close(), 1500);
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(reminder));
-
-    updateStatus();
-    panel.classList.remove("gr-show");
-
-    // Ask permission for browser notifications.
-    if ("Notification" in window &&
-        Notification.permission === "default") {
-      Notification.requestPermission().catch(() => {});
+    } catch (error) {
+      console.log("Reminder sound unavailable.");
     }
   }
 
-  function turnOff() {
-    reminder = null;
-    localStorage.removeItem(STORAGE_KEY);
-    updateStatus();
+  /* ---------- POPUP ---------- */
+
+  function closePopup() {
+    popup.classList.remove("gr-show");
+
+    if (popupTimer) {
+      clearTimeout(popupTimer);
+      popupTimer = null;
+    }
   }
 
   function showReminder() {
-    popup.classList.add("gr-active");
+    closePopup();
 
-    // Browser notification, if permission was granted.
-    if ("Notification" in window &&
-        Notification.permission === "granted") {
-      try {
-        new Notification("It's time to talk with Ganesh! 💗", {
-          body: "Sharmila, Ganesh is waiting for you ♡"
-        });
-      } catch (error) {
-        console.log("Notification unavailable:", error);
-      }
-    }
+    const randomMessage =
+      messages[Math.floor(Math.random() * messages.length)];
 
-    // Gentle chime (may be blocked by browser autoplay settings).
-    try {
-      const AudioContextClass =
-        window.AudioContext || window.webkitAudioContext;
+    document.getElementById("grMessage").textContent = randomMessage;
 
-      if (AudioContextClass) {
-        const audio = new AudioContextClass();
-        [523.25, 659.25, 783.99].forEach((frequency, index) => {
-          const oscillator = audio.createOscillator();
-          const gain = audio.createGain();
+    popup.classList.add("gr-show");
 
-          oscillator.frequency.value = frequency;
-          oscillator.type = "sine";
-          gain.gain.value = 0.07;
+    playReminderSound();
 
-          oscillator.connect(gain);
-          gain.connect(audio.destination);
+    popupTimer = setTimeout(() => {
+      closePopup();
+    }, 5000);
+  }
 
-          const start = audio.currentTime + index * 0.22;
-          oscillator.start(start);
-          gain.gain.setValueAtTime(0.07, start);
-          gain.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
-          oscillator.stop(start + 0.36);
-        });
-      }
-    } catch (error) {
-      console.log("Sound unavailable:", error);
+  /* ---------- PANEL ---------- */
+
+  function closePanel() {
+    panel.classList.remove("gr-show");
+  }
+
+  function togglePanel() {
+    panel.classList.toggle("gr-show");
+    closePopup();
+  }
+
+  /* ---------- BELL BUTTON ---------- */
+
+  const bell = document.createElement("button");
+
+  bell.id = "grBell";
+  bell.type = "button";
+  bell.innerHTML = "🔔";
+  bell.title = "Reminder settings";
+
+  bell.style.cssText = `
+    width: 52px;
+    height: 52px;
+    border: none;
+    border-radius: 50%;
+    background: #f7d3e2;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  `;
+
+  wrapper.appendChild(bell);
+
+  bell.addEventListener("click", togglePanel);
+
+  /* ---------- AUTOMATIC REMINDERS ---------- */
+
+  function clearAutoTimer() {
+    if (autoTimer) {
+      clearTimeout(autoTimer);
+      autoTimer = null;
     }
   }
 
-  function checkReminder() {
-    if (!reminder || !reminder.active) return;
+  function scheduleAutomaticReminder() {
+    clearAutoTimer();
 
-    if (Date.now() >= reminder.nextAt) {
+    if (mode !== "auto") return;
+
+    const savedNext = Number(localStorage.getItem(NEXT_KEY));
+    const now = Date.now();
+
+    let nextTime = savedNext;
+
+    if (!nextTime || nextTime <= now) {
+      nextTime = now + (2 + Math.random()) * 60 * 1000;
+      localStorage.setItem(NEXT_KEY, String(nextTime));
+    }
+
+    autoTimer = setTimeout(() => {
+      if (mode !== "auto") return;
+
       showReminder();
 
-      if (reminder.repeat === "daily") {
-        reminder.nextAt = nextTime(reminder.time);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(reminder));
-        updateStatus();
-      } else {
-        reminder = null;
-        localStorage.removeItem(STORAGE_KEY);
-        updateStatus();
-      }
+      const nextDelay = (2 + Math.random()) * 60 * 1000;
+
+      localStorage.setItem(
+        NEXT_KEY,
+        String(Date.now() + nextDelay)
+      );
+
+      scheduleAutomaticReminder();
+
+    }, Math.max(1000, nextTime - now));
+  }
+
+  /* ---------- TIME REMINDER ---------- */
+
+  function checkScheduledReminder() {
+    if (mode !== "time") return;
+
+    const saved = localStorage.getItem(TIME_KEY);
+    if (!saved) return;
+
+    let reminder;
+
+    try {
+      reminder = JSON.parse(saved);
+    } catch (error) {
+      return;
+    }
+
+    if (!reminder.date || !reminder.time) return;
+
+    const now = new Date();
+    const target = new Date(
+      reminder.date + "T" + reminder.time
+    );
+
+    if (now < target) return;
+
+    showReminder();
+
+    if (reminder.repeat === "daily") {
+      const tomorrow = new Date(target);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      reminder.date = [
+        tomorrow.getFullYear(),
+        String(tomorrow.getMonth() + 1).padStart(2, "0"),
+        String(tomorrow.getDate()).padStart(2, "0")
+      ].join("-");
+
+      localStorage.setItem(
+        TIME_KEY,
+        JSON.stringify(reminder)
+      );
+
+    } else {
+      localStorage.removeItem(TIME_KEY);
+
+      mode = "off";
+      localStorage.setItem(MODE_KEY, mode);
+
+      updateModeUI();
     }
   }
 
-  bell.addEventListener("click", () => {
-    panel.classList.toggle("gr-show");
+  /* ---------- MODE SETTINGS ---------- */
+
+  function updateModeUI() {
+    document.querySelectorAll('input[name="grMode"]').forEach(input => {
+      input.checked = input.value === mode;
+    });
+
+    timeBox.classList.toggle("gr-visible", mode === "time");
+  }
+
+  document.querySelectorAll('input[name="grMode"]').forEach(input => {
+    input.addEventListener("change", () => {
+      mode = input.value;
+
+      localStorage.setItem(MODE_KEY, mode);
+
+      if (mode === "auto") {
+        localStorage.removeItem(TIME_KEY);
+        scheduleAutomaticReminder();
+
+      } else {
+        clearAutoTimer();
+        localStorage.removeItem(NEXT_KEY);
+      }
+
+      updateModeUI();
+    });
   });
 
-  document.getElementById("grSave")
-    .addEventListener("click", saveReminder);
+  /* ---------- SAVE TIME ---------- */
 
-  document.getElementById("grCancel")
-    .addEventListener("click", turnOff);
+  document.getElementById("grSaveTime")
+    .addEventListener("click", () => {
+
+      const repeat = document.getElementById("grRepeat").value;
+      const date = document.getElementById("grDate").value;
+      const time = document.getElementById("grTime").value;
+
+      if (!date || !time) {
+        alert("Please choose a date and time ♡");
+        return;
+      }
+
+      const target = new Date(date + "T" + time);
+
+      if (target <= new Date()) {
+        alert("Please choose a future date and time ♡");
+        return;
+      }
+
+      localStorage.setItem(
+        TIME_KEY,
+        JSON.stringify({ repeat, date, time })
+      );
+
+      mode = "time";
+      localStorage.setItem(MODE_KEY, mode);
+
+      clearAutoTimer();
+      localStorage.removeItem(NEXT_KEY);
+
+      updateModeUI();
+      closePanel();
+
+      alert("Your reminder has been saved! ♡");
+    });
+
+  /* ---------- TURN OFF ---------- */
+
+  document.getElementById("grTurnOff")
+    .addEventListener("click", () => {
+
+      mode = "off";
+
+      localStorage.setItem(MODE_KEY, mode);
+      localStorage.removeItem(TIME_KEY);
+      localStorage.removeItem(NEXT_KEY);
+
+      clearAutoTimer();
+      closePopup();
+      closePanel();
+
+      updateModeUI();
+    });
+
+  /* ---------- LATER ---------- */
 
   document.getElementById("grLater")
-    .addEventListener("click", () => {
-      popup.classList.remove("gr-active");
-    });
+    .addEventListener("click", closePopup);
 
-  document.getElementById("grTalk")
-    .addEventListener("click", () => {
-      popup.classList.remove("gr-active");
+  /* ---------- CLOSE WHEN CLICKING OUTSIDE ---------- */
 
-      const chatSection =
-        document.getElementById("ganeshChatSection");
+  document.addEventListener("pointerdown", (event) => {
 
-      if (chatSection) {
-        chatSection.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      } else {
-        const surprise = document.getElementById("surprise");
-        if (surprise) {
-          surprise.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
-        }
-      }
-    });
+    const clickedPanel = event.target.closest("#grPanel");
+    const clickedBell = event.target.closest("#grBell");
+    const clickedPopup = event.target.closest("#grPopup");
 
-  // Restore previously saved reminder.
-  if (reminder && reminder.active) {
-    timeInput.value = reminder.time || "20:00";
-    repeatInput.value = reminder.repeat || "daily";
+    if (!clickedPanel && !clickedBell) {
+      closePanel();
+    }
 
-    // If an alarm time passed while the website was closed,
-    // move it to the next suitable day instead of firing late.
-    if (reminder.nextAt <= Date.now()) {
-      reminder.nextAt = nextTime(reminder.time);
+    if (!clickedPopup) {
+      closePopup();
+    }
+  });
 
-      if (reminder.repeat === "once") {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(reminder));
-      } else {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(reminder));
-      }
+  /* ---------- RESTORE SAVED SETTINGS ---------- */
+
+  if (!localStorage.getItem(MODE_KEY)) {
+    mode = "auto";
+    localStorage.setItem(MODE_KEY, mode);
+  }
+
+  updateModeUI();
+
+  if (mode === "auto") {
+    scheduleAutomaticReminder();
+  }
+
+  if (mode === "time") {
+    const saved = localStorage.getItem(TIME_KEY);
+
+    if (saved) {
+      try {
+        const reminder = JSON.parse(saved);
+
+        document.getElementById("grRepeat").value =
+          reminder.repeat || "daily";
+
+        document.getElementById("grDate").value =
+          reminder.date || "";
+
+        document.getElementById("grTime").value =
+          reminder.time || "";
+
+      } catch (error) {}
     }
   }
 
-  updateStatus();
+  /* Check scheduled reminders every 10 seconds */
 
-  // Check every 10 seconds while the page is open.
-  setInterval(checkReminder, 10000);
+  setInterval(checkScheduledReminder, 10000);
 
 });

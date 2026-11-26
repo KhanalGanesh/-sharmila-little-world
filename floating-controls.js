@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     #pinkIconStack .dynamic-sound-toggle[aria-pressed="true"]::before {
-      content: "🔊" !important;
+      content: "🎵" !important;
     }
 
     #pinkIconStack .dynamic-sound-toggle[aria-pressed="false"]::before {
