@@ -1,0 +1,691 @@
+
+/* =========================================
+   SHARMILA'S LITTLE WORLD
+   Dynamic Premium Pink Theme
+========================================= */
+
+:root {
+  --dynamic-pink: #e88eaa;
+  --dynamic-pink-dark: #c96889;
+  --dynamic-pink-light: #fff0f5;
+  --dynamic-cream: #fffaf8;
+  --dynamic-text: #46343d;
+  --dynamic-muted: #927d86;
+  --dynamic-border: #f1dce4;
+  --dynamic-shadow: 0 12px 35px rgba(190, 111, 139, .10);
+}
+
+/* Dynamic sections */
+
+.dynamic-section {
+  width: 100%;
+  margin: 35px 0;
+  animation: dynamicFadeIn .5s ease;
+}
+
+.dynamic-heading {
+  margin-bottom: 24px;
+}
+
+.dynamic-heading h2 {
+  color: var(--dynamic-text);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(25px, 4vw, 34px);
+  margin: 0 0 8px;
+}
+
+.dynamic-heading p {
+  color: var(--dynamic-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Cards and grids */
+
+.dynamic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 20px;
+}
+
+.dynamic-card {
+  min-width: 0;
+  background: #fff;
+  border: 1px solid var(--dynamic-border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--dynamic-shadow);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.dynamic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(190, 111, 139, .16);
+}
+
+.dynamic-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.dynamic-card-content {
+  padding: 18px;
+}
+
+.dynamic-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  color: var(--dynamic-text);
+  margin: 0 0 8px;
+}
+
+.dynamic-card p {
+  color: var(--dynamic-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 8px;
+}
+
+/* Buttons */
+
+.dynamic-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 21px;
+  margin: 10px 7px 0 0;
+  border: none;
+  border-radius: 30px;
+  background: var(--dynamic-pink);
+  color: white !important;
+  text-decoration: none !important;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .25s ease;
+}
+
+.dynamic-btn:hover {
+  background: var(--dynamic-pink-dark);
+  transform: translateY(-2px);
+}
+
+.dynamic-btn-outline {
+  background: white;
+  color: var(--dynamic-pink-dark) !important;
+  border: 1px solid var(--dynamic-pink);
+}
+
+.dynamic-btn-outline:hover {
+  background: var(--dynamic-pink-light);
+}
+
+/* Inputs */
+
+.dynamic-label {
+  display: block;
+  color: var(--dynamic-text);
+  font-size: 13px;
+  font-weight: 600;
+  margin: 13px 0 5px;
+}
+
+.dynamic-select,
+.dynamic-search {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 13px 16px;
+  border: 1px solid var(--dynamic-border);
+  border-radius: 12px;
+  background: white;
+  color: var(--dynamic-text);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  margin: 8px 0 14px;
+}
+
+.dynamic-select:focus,
+.dynamic-search:focus {
+  border-color: var(--dynamic-pink);
+  box-shadow: 0 0 0 3px rgba(232, 142, 170, .12);
+}
+
+.dynamic-search-wrap {
+  display: flex;
+  align-items: stretch;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.dynamic-search-wrap .dynamic-search {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.dynamic-search-wrap .dynamic-btn {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+/* Fashion */
+
+.fashion-feature {
+  background: linear-gradient(135deg, #fff0f5, #fffaf5);
+  border-radius: 24px;
+  padding: 25px;
+  margin-bottom: 25px;
+  border: 1px solid var(--dynamic-border);
+}
+
+.fashion-feature h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 25px;
+  color: var(--dynamic-text);
+}
+
+.fashion-tag,
+.fashion-tag-list a {
+  display: inline-block;
+  background: white;
+  color: var(--dynamic-pink-dark);
+  padding: 8px 14px;
+  margin: 5px 5px 5px 0;
+  border-radius: 20px;
+  border: 1px solid var(--dynamic-border);
+  font-size: 12px;
+  text-decoration: none;
+  transition: .2s ease;
+}
+
+.fashion-tag:hover,
+.fashion-tag-list a:hover {
+  background: var(--dynamic-pink-light);
+}
+
+/* Results */
+
+.dynamic-result {
+  margin-top: 18px;
+  padding: 20px;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #fff0f5, #fffaf8);
+  border: 1px solid var(--dynamic-border);
+  animation: dynamicFadeIn .35s ease;
+}
+
+.dynamic-result h3 {
+  color: var(--dynamic-pink-dark);
+  margin: 5px 0;
+}
+
+.dynamic-result a {
+  color: var(--dynamic-pink-dark);
+  font-weight: 600;
+}
+
+/* Music */
+
+.music-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-top: 22px;
+}
+
+.music-card {
+  min-width: 0;
+  background: white;
+  border: 1px solid var(--dynamic-border);
+  border-radius: 17px;
+  overflow: hidden;
+}
+
+.music-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  height: auto;
+  object-fit: cover;
+}
+
+.music-card-content {
+  padding: 13px;
+}
+
+.music-card-content strong {
+  display: block;
+  color: var(--dynamic-text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.music-card-content p {
+  margin: 4px 0 10px;
+  color: var(--dynamic-muted);
+  font-size: 12px;
+}
+
+.music-card audio {
+  display: block;
+  width: 100%;
+  height: 35px;
+  margin: 10px 0;
+}
+
+.music-card a {
+  color: var(--dynamic-pink-dark);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Country explorer */
+
+.country-banner {
+  background: linear-gradient(120deg, #fff0f5, #f9e9ed);
+  padding: 25px;
+  border-radius: 22px;
+  margin: 22px 0;
+  border: 1px solid var(--dynamic-border);
+  text-align: center;
+}
+
+.country-flag-image {
+  width: 100px !important;
+  height: auto !important;
+  max-height: 70px;
+  object-fit: contain !important;
+  margin: 0 auto 12px;
+  border-radius: 6px;
+}
+
+.country-banner h2 {
+  color: var(--dynamic-text);
+  font-family: 'Playfair Display', serif;
+  margin: 8px 0;
+}
+
+.country-banner p {
+  color: var(--dynamic-muted);
+}
+
+.country-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.country-info {
+  min-width: 0;
+  background: white;
+  border: 1px solid var(--dynamic-border);
+  padding: 16px;
+  border-radius: 15px;
+  overflow-wrap: anywhere;
+}
+
+.country-info small {
+  display: block;
+  color: var(--dynamic-muted);
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.country-info strong {
+  color: var(--dynamic-text);
+  font-size: 14px;
+}
+
+.country-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.country-photo {
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 15px;
+  border: 1px solid var(--dynamic-border);
+  background: white;
+}
+
+.country-photo img {
+  width: 100%;
+  height: 135px;
+  object-fit: cover;
+  display: block;
+}
+
+.country-photo p {
+  padding: 9px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--dynamic-text);
+}
+
+/* Loading and errors */
+
+.dynamic-loading,
+.dynamic-empty {
+  text-align: center;
+  padding: 28px 18px;
+  color: var(--dynamic-muted);
+  background: var(--dynamic-cream);
+  border: 1px dashed var(--dynamic-border);
+  border-radius: 18px;
+  margin: 15px 0;
+}
+
+.dynamic-loading::before {
+  content: "♡";
+  display: block;
+  font-size: 28px;
+  color: var(--dynamic-pink);
+  animation: dynamicPulse 1s infinite alternate;
+}
+
+/* Bottom back button */
+
+.dynamic-back-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 35px 0 15px;
+  margin-top: 35px;
+  border-top: 1px solid var(--dynamic-border);
+}
+
+.dynamic-back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 25px;
+  border: 1px solid var(--dynamic-pink);
+  border-radius: 30px;
+  background: white;
+  color: var(--dynamic-pink-dark);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .25s ease;
+}
+
+.dynamic-back-button:hover {
+  background: var(--dynamic-pink-light);
+  transform: translateY(-2px);
+}
+
+/* Sound toggle */
+
+.dynamic-sound-toggle {
+  position: fixed;
+  right: 17px;
+  bottom: 17px;
+  z-index: 9999;
+  border: 1px solid var(--dynamic-border);
+  border-radius: 30px;
+  padding: 10px 15px;
+  background: rgba(255,255,255,.96);
+  color: var(--dynamic-pink-dark);
+  box-shadow: var(--dynamic-shadow);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Mobile navigation */
+
+.dynamic-nav-link {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .nav.open {
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 12px;
+    background: white;
+    border: 1px solid var(--dynamic-border);
+    border-radius: 15px;
+    box-shadow: var(--dynamic-shadow);
+  }
+
+  .nav.open .nav-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 12px 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .dynamic-section {
+    margin: 24px 0;
+  }
+
+  .dynamic-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .dynamic-card {
+    border-radius: 15px;
+  }
+
+  .dynamic-card img {
+    height: 165px;
+  }
+
+  .dynamic-card-content {
+    padding: 12px;
+  }
+
+  .dynamic-card h3 {
+    font-size: 16px;
+  }
+
+  .dynamic-card p {
+    font-size: 12px;
+  }
+
+  .fashion-feature,
+  .country-banner {
+    padding: 18px;
+  }
+
+  .dynamic-btn {
+    padding: 10px 15px;
+    font-size: 12px;
+  }
+
+  .dynamic-search-wrap {
+    flex-direction: column;
+  }
+
+  .dynamic-search-wrap .dynamic-btn {
+    width: 100%;
+  }
+
+  .music-results {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .country-photo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .country-photo img {
+    height: 180px;
+  }
+
+  .dynamic-sound-toggle {
+    right: 10px;
+    bottom: 10px;
+  }
+}
+
+@keyframes dynamicFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dynamicPulse {
+  from {
+    opacity: .45;
+    transform: scale(.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* NEPALI PREMIUM FASHION */
+
+.nepali-fashion-card {
+  background: linear-gradient(145deg, #fff, #fff5f8);
+}
+
+.nepali-fashion-emoji {
+  font-size: 38px;
+  margin-bottom: 12px;
+}
+
+.nepali-fashion-type {
+  color: var(--dynamic-pink-dark) !important;
+  font-weight: 700;
+  margin-bottom: 8px !important;
+}
+
+.nepali-fashion-card .dynamic-btn {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* SOUND BUTTON - SIDE OF WEBSITE */
+
+.dynamic-sound-toggle {
+  position: fixed;
+  right: 12px;
+  top: 48%;
+  bottom: auto;
+  z-index: 99999;
+  border: 1px solid var(--dynamic-border);
+  border-radius: 25px;
+  padding: 12px 15px;
+  background: #fff;
+  color: var(--dynamic-pink-dark);
+  box-shadow: var(--dynamic-shadow);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* MUSIC ATTRIBUTION */
+
+.music-attribution {
+  margin-top: 15px;
+  font-size: 11px;
+  color: var(--dynamic-muted);
+}
+
+/* MOBILE NAVIGATION */
+
+@media (max-width: 768px) {
+  .nav.open {
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 12px;
+    background: white;
+    border: 1px solid var(--dynamic-border);
+    border-radius: 15px;
+    box-shadow: var(--dynamic-shadow);
+  }
+
+  .nav.open .nav-link {
+    display: block !important;
+    width: 100%;
+    text-align: left;
+    padding: 12px 14px;
+  }
+
+  .dynamic-sound-toggle {
+    right: 7px;
+    top: 45%;
+    padding: 10px 11px;
+    font-size: 11px;
+  }
+}
+
+/* BEAUTIFUL COUNTRY DESTINATION PHOTOS */
+
+.country-photo-heading {
+  margin: 30px 0 18px;
+  text-align: center;
+}
+
+.country-photo-heading h3 {
+  color: #9d456e;
+  margin-bottom: 8px;
+}
+
+.country-photo-heading p {
+  color: #987487;
+  font-size: 14px;
+}
+
+.country-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin: 22px 0;
+}
+
+.country-photo {
+  overflow: hidden;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+}
+
+.country-photo img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.country-photo:hover img {
+  transform: scale(1.06);
+}
+
+.country-photo p {
+  padding: 12px;
+  margin: 0;
+  font-size: 13px;
+  color: #9d456e;
+  text-align: center;
+}
