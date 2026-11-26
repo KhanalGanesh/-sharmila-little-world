@@ -1,8 +1,8 @@
 
 /* =========================================
-   SHARE WITH GANESH ♡
+   CENTRAL SHARE CENTER ♡
    SHARMILA'S LITTLE WORLD
-   COMPACT URL REPORT SHARING
+   MULTI-TAB REPORT SHARING
    NO FIREBASE / NO API
 ========================================= */
 
@@ -11,16 +11,53 @@ document.addEventListener("DOMContentLoaded", () => {
   const MESSENGER_URL = "https://m.me/ohh.you.copy.my.profile.link";
 
   const tabs = [
-    { id: "fashion", title: "Fashion" },
-    { id: "hobbies", title: "Hobbies" },
-    { id: "dreams", title: "Dreams" },
-    { id: "moments", title: "Moments" },
-    { id: "dating", title: "Dating" },
-    { id: "play", title: "Play" },
-    { id: "surprise", title: "Surprise" },
-    { id: "music", title: "Music" },
-    { id: "countries", title: "Explore the World" }
+    { id: "fashion", title: "Fashion", emoji: "👗" },
+    { id: "hobbies", title: "Hobbies", emoji: "🎨" },
+    { id: "dreams", title: "Dreams", emoji: "🌷" },
+    { id: "moments", title: "Moments", emoji: "📸" },
+    { id: "dating", title: "Dating", emoji: "💗" },
+    { id: "play", title: "Play", emoji: "✨" },
+    { id: "surprise", title: "Surprise", emoji: "🎁" },
+    { id: "music", title: "Music", emoji: "🎵" },
+    { id: "countries", title: "Explore", emoji: "🌍" }
   ];
+
+  const topicNames = {
+    fashion: [
+      "Your style mood",
+      "Favourite colours",
+      "Clothing you love",
+      "Shoes & accessories",
+      "Beauty interests"
+    ],
+    hobbies: [
+      "Music",
+      "Screen & stories",
+      "Creative hobbies",
+      "Free-time mood"
+    ],
+    dreams: [
+      "Places to explore",
+      "Dream lifestyle",
+      "Personal goals",
+      "Dream experiences"
+    ],
+    dating: [
+      "Your ideal first date",
+      "Your date atmosphere",
+      "What matters most",
+      "Little things you love"
+    ],
+    play: [
+      "Choose your perfect day",
+      "Pick a little treat",
+      "Your evening mood",
+      "Choose a getaway",
+      "Your happy place"
+    ]
+  };
+
+  const selectedTabs = new Set();
 
   function readState() {
     try {
@@ -28,6 +65,16 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch {
       return {};
     }
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[char]));
   }
 
   function clean(value) {
@@ -41,25 +88,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (typeof value === "object") {
       return Object.entries(value)
-        .filter(([, val]) => val !== null && val !== undefined && val !== "")
-        .map(([key, val]) => `${key}: ${clean(val)}`)
-        .join(", ");
+        .filter(([, item]) =>
+          item !== null &&
+          item !== undefined &&
+          item !== ""
+        )
+        .map(([key, item]) => `${key}: ${clean(item)}`)
+        .join("\n");
     }
 
     return String(value).trim();
   }
 
   function addStyles() {
-    if (document.getElementById("ganeshShareStyles")) return;
+    if (document.getElementById("centralShareStyles")) return;
 
     const style = document.createElement("style");
-    style.id = "ganeshShareStyles";
+    style.id = "centralShareStyles";
 
     style.textContent = `
-      .tab-share-card {
+      #share .back-btn {
+        display: inline-block;
+        margin-bottom: 18px;
+      }
+
+      .central-share-card {
         width: min(900px, calc(100% - 30px));
-        margin: 38px auto 30px;
-        padding: 25px;
+        margin: 25px auto 35px;
+        padding: 26px;
         box-sizing: border-box;
         border: 1px solid #f1d5df;
         border-radius: 23px;
@@ -68,73 +124,79 @@ document.addEventListener("DOMContentLoaded", () => {
         color: #46343d;
       }
 
-      .tab-share-open,
-      .tab-share-send,
-      .tab-share-copy {
-        width: 100%;
-        padding: 15px 20px;
-        border: 0;
-        border-radius: 30px;
-        background: linear-gradient(135deg,#e99bb5,#c96889);
-        color: white;
-        font-size: 15px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: .2s;
-      }
-
-      .tab-share-open:hover,
-      .tab-share-send:hover,
-      .tab-share-copy:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 7px 18px rgba(201,104,137,.2);
-      }
-
-      .tab-share-content {
-        display: none;
-        margin-top: 23px;
-      }
-
-      .tab-share-content.open {
-        display: block;
-      }
-
-      .tab-share-eyebrow {
-        color: #c96889;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        margin-bottom: 8px;
-      }
-
-      .tab-share-card h2 {
+      .central-share-card h2 {
         color: #bd6484;
         font-size: 23px;
         margin: 0 0 8px;
       }
 
-      .tab-share-description {
+      .central-share-description {
         color: #927d86;
         font-size: 14px;
         line-height: 1.7;
+        margin-bottom: 20px;
       }
 
-      .tab-share-ready {
-        color: #b85e80;
+      .central-share-label {
+        display: block;
+        margin: 22px 0 12px;
+        color: #bd6484;
         font-size: 13px;
-        font-weight: 600;
-        margin: 18px 0 10px;
+        font-weight: 700;
       }
 
-      .tab-share-preview {
-        width: 100%;
+      .central-share-grid {
+        display: grid;
+        grid-template-columns: repeat(2,minmax(0,1fr));
+        gap: 11px;
+      }
+
+      .central-share-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px;
+        border: 1px solid #f0d5df;
+        border-radius: 13px;
+        background: white;
+        color: #59454e;
+        cursor: pointer;
+        transition: .2s;
+        font-size: 14px;
+      }
+
+      .central-share-option:has(input:checked) {
+        border-color: #d783a1;
+        background: #fff0f5;
+        box-shadow: 0 3px 12px rgba(201,104,137,.09);
+      }
+
+      .central-share-option input {
+        accent-color: #c96889;
+        width: 17px;
+        height: 17px;
+        flex-shrink: 0;
+      }
+
+      .central-share-private {
+        margin-top: 18px;
+        padding: 13px 15px;
+        border: 1px dashed #e6b7c8;
+        border-radius: 12px;
+        color: #927d86;
+        background: #fffafd;
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .central-share-preview {
         min-height: 100px;
-        max-height: 350px;
-        overflow: auto;
+        max-height: 390px;
+        overflow-y: auto;
         white-space: pre-wrap;
         overflow-wrap: anywhere;
         box-sizing: border-box;
-        padding: 17px;
+        padding: 18px;
         border: 1px solid #f0d5df;
         border-radius: 15px;
         background: white;
@@ -143,11 +205,48 @@ document.addEventListener("DOMContentLoaded", () => {
         line-height: 1.8;
       }
 
-      .tab-share-link {
+      .central-share-preview:empty::before {
+        content: "Select the tabs you want to share. Your preview will appear here ♡";
+        color: #b49da6;
+      }
+
+      .central-share-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .central-share-button {
+        flex: 1;
+        min-width: 180px;
+        padding: 14px 18px;
+        border: 0;
+        border-radius: 30px;
+        background: linear-gradient(135deg,#e99bb5,#c96889);
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s;
+      }
+
+      .central-share-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 7px 18px rgba(201,104,137,.2);
+      }
+
+      .central-share-button.secondary {
+        background: #fff;
+        color: #bd6484;
+        border: 1px solid #e9b5c7;
+      }
+
+      .central-share-link {
         display: none;
         width: 100%;
         box-sizing: border-box;
-        margin-top: 14px;
+        margin-top: 15px;
         padding: 13px;
         border: 1px solid #e9b5c7;
         border-radius: 12px;
@@ -157,30 +256,21 @@ document.addEventListener("DOMContentLoaded", () => {
         overflow-wrap: anywhere;
       }
 
-      .tab-share-copy {
-        display: none;
-        margin-top: 10px;
-        padding: 12px;
-        font-size: 13px;
-      }
-
-      .tab-share-send {
-        margin-top: 17px;
-      }
-
-      .tab-share-status {
+      .central-share-status {
+        min-height: 22px;
+        margin-top: 12px;
         color: #a65b78;
         font-size: 13px;
-        line-height: 1.6;
-        margin-top: 12px;
+        line-height: 1.7;
         overflow-wrap: anywhere;
       }
 
-      .tab-share-private {
-        text-align: center;
-        color: #927d86;
-        font-size: 14px;
-        line-height: 1.8;
+      .central-share-eyebrow {
+        color: #c96889;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 9px;
       }
 
       .shared-report-screen {
@@ -214,7 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
         white-space: pre-wrap;
         overflow-wrap: anywhere;
         color: #59454e;
-        font-size: 15px;
+        font-size: 14px;
         line-height: 2;
         padding: 20px;
         background: #fff7fa;
@@ -235,12 +325,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       @media(max-width:600px) {
-        .tab-share-card {
+        .central-share-card {
           padding: 19px;
         }
 
-        .tab-share-card h2 {
-          font-size: 21px;
+        .central-share-grid {
+          grid-template-columns: 1fr;
         }
 
         .shared-report-box {
@@ -252,85 +342,19 @@ document.addEventListener("DOMContentLoaded", () => {
     document.head.appendChild(style);
   }
 
-  function removeOldShareControls() {
-    document.querySelectorAll("[data-share]").forEach(input => {
-      const wrapper = input.closest("label") || input.parentElement;
-
-      if (wrapper && !wrapper.closest(".tab-share-card")) {
-        wrapper.remove();
-      }
-    });
-
-    const oldSharePage = document.getElementById("share");
-
-    if (oldSharePage) {
-      oldSharePage.style.display = "none";
-    }
-  }
-
-  // Compact report: only selected answers.
-  function buildReport(tab) {
-    const state = readState();
-    const lines = [];
-
-    lines.push(`♡SHARMILA'S LITTLE WORLD♡`);
-    lines.push(`My ${tab.title} Report`);
-
-    const answers = state.answers?.[tab.id];
-
-    if (Array.isArray(answers)) {
-      answers.forEach(answer => {
-        const value = clean(answer);
-        if (value) lines.push(value);
-      });
-    } else if (answers && typeof answers === "object") {
-      Object.entries(answers).forEach(([topic, answer]) => {
-        const value = clean(answer);
-        if (value) lines.push(`${topic}: ${value}`);
-      });
-    } else if (answers) {
-      const value = clean(answers);
-      if (value) lines.push(value);
-    }
-
-    // Moments: saved memories only.
-    if (tab.id === "moments") {
-      (state.memories || []).forEach(memory => {
-        if (memory.title || memory.text) {
-          lines.push(
-            `${memory.title || "Memory"}${memory.date ? ` (${memory.date})` : ""}: ${memory.text || ""}`
-          );
-        }
-      });
-    }
-
-    lines.push("Made with love ♡");
-
-    return lines.join("\n");
-  }
-
-  // URL contains the report, no database needed.
-  function generateReportLink(report) {
-    const baseURL =
-      window.location.origin +
-      window.location.pathname;
-
-    return baseURL + "#shared-report=" + encodeURIComponent(report);
-  }
-
   function showSharedReport() {
-    const hash = window.location.hash;
-
-    if (!hash.startsWith("#shared-report=")) return false;
+    if (!window.location.hash.startsWith("#shared-report=")) {
+      return false;
+    }
 
     let report = "";
 
     try {
       report = decodeURIComponent(
-        hash.substring("#shared-report=".length)
+        window.location.hash.substring("#shared-report=".length)
       );
     } catch {
-      report = "";
+      return false;
     }
 
     if (!report) return false;
@@ -353,36 +377,174 @@ document.addEventListener("DOMContentLoaded", () => {
     close.textContent = "♡ Back to Website";
 
     close.addEventListener("click", () => {
-      window.location.hash = "";
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search
+      );
       screen.remove();
     });
 
-    box.appendChild(heading);
-    box.appendChild(content);
-    box.appendChild(close);
+    box.append(heading, content, close);
     screen.appendChild(box);
     document.body.appendChild(screen);
 
     return true;
   }
 
+  function getTabContent(tab) {
+    const state = readState();
+    const lines = [];
+
+    if (tab.id === "moments") {
+      const memories = Array.isArray(state.memories)
+        ? state.memories
+        : [];
+
+      memories.forEach(memory => {
+        if (memory.title || memory.text) {
+          let line = `♡ ${memory.title || "Memory"}`;
+
+          if (memory.date) {
+            line += ` (${memory.date})`;
+          }
+
+          if (memory.text) {
+            line += `\n${memory.text}`;
+          }
+
+          lines.push(line);
+        }
+      });
+
+      return lines.length
+        ? lines.join("\n\n")
+        : "No saved memories yet.";
+    }
+
+    if (tab.id === "surprise") {
+      const title = document.getElementById("surpriseTitle")?.textContent?.trim();
+      const message = document.getElementById("surpriseMessage")?.textContent?.trim();
+
+      if (
+        title &&
+        message &&
+        !title.includes("waiting") &&
+        !message.includes("pick a box")
+      ) {
+        return `${title}\n${message}`;
+      }
+
+      return "No surprise has been opened yet.";
+    }
+
+    const answers = state.answers?.[tab.id];
+
+    if (Array.isArray(answers)) {
+      answers.forEach((answer, index) => {
+        const value = clean(answer);
+
+        if (value) {
+          const topic = topicNames[tab.id]?.[index];
+
+          lines.push(
+            topic ? `${topic}: ${value}` : value
+          );
+        }
+      });
+    } else if (answers && typeof answers === "object") {
+      Object.entries(answers).forEach(([topic, answer]) => {
+        const value = clean(answer);
+        if (value) lines.push(`${topic}: ${value}`);
+      });
+    } else if (answers) {
+      const value = clean(answers);
+      if (value) lines.push(value);
+    }
+
+    // Include saved result details, such as the Dating date plan.
+    const result = state.results?.[tab.id];
+
+    if (result && tab.id === "dating") {
+      if (result.date) lines.push(`Date: ${result.date}`);
+      if (result.time) lines.push(`Time: ${result.time}`);
+      if (result.place) lines.push(`Place: ${result.place}`);
+    }
+
+    // Also check whether dynamic tabs save their data directly in state.
+    if (
+      lines.length === 0 &&
+      (tab.id === "music" || tab.id === "countries")
+    ) {
+      const dynamicData =
+        state[tab.id] ??
+        state.dynamic?.[tab.id] ??
+        state.results?.[tab.id];
+
+      const value = clean(dynamicData);
+
+      if (value) lines.push(value);
+    }
+
+    return lines.length
+      ? lines.join("\n")
+      : "No saved selections yet.";
+  }
+
+  function buildReport() {
+    const lines = [
+      "♡ SHARMILA'S LITTLE WORLD ♡",
+      "A LITTLE REPORT FOR GANESH",
+      ""
+    ];
+
+    tabs.forEach(tab => {
+      if (!selectedTabs.has(tab.id)) return;
+
+      lines.push(`${tab.emoji} ${tab.title.toUpperCase()}`);
+      lines.push("--------------------------------");
+
+      const content = getTabContent(tab);
+      lines.push(content);
+      lines.push("");
+    });
+
+    lines.push("Made with love ♡");
+
+    return lines.join("\n");
+  }
+
+  function updatePreview(preview) {
+    if (selectedTabs.size === 0) {
+      preview.textContent = "";
+      return;
+    }
+
+    preview.textContent = buildReport();
+  }
+
+  function generateReportLink(report) {
+    const baseURL =
+      window.location.origin +
+      window.location.pathname;
+
+    return baseURL + "#shared-report=" + encodeURIComponent(report);
+  }
+
   async function copyText(text) {
-    // Try modern clipboard first.
     if (navigator.clipboard && window.isSecureContext) {
       try {
         await navigator.clipboard.writeText(text);
         return true;
-      } catch (error) {
-        // Continue to fallback.
+      } catch {
+        // Use fallback below.
       }
     }
 
-    // Fallback for supported browsers.
     const textarea = document.createElement("textarea");
     textarea.value = text;
     textarea.style.position = "fixed";
     textarea.style.left = "-9999px";
-    textarea.style.top = "0";
 
     document.body.appendChild(textarea);
     textarea.focus();
@@ -400,92 +562,136 @@ document.addEventListener("DOMContentLoaded", () => {
     return copied;
   }
 
-  function createPanel(tab) {
-    const page = document.getElementById(tab.id);
+  function removeOldShareControls() {
+    document.querySelectorAll("[data-share]").forEach(input => {
+      const wrapper = input.closest(".share-choice") ||
+        input.closest("label") ||
+        input.parentElement;
 
-    if (!page || page.querySelector(".tab-share-card")) return;
-
-    const panel = document.createElement("section");
-    panel.className = "tab-share-card";
-
-    panel.innerHTML = `
-      <button type="button" class="tab-share-open">
-        ♡ Share with Ganesh
-      </button>
-
-      <div class="tab-share-content">
-        <p class="tab-share-eyebrow">
-          A LITTLE MESSAGE FOR GANESH ♡
-        </p>
-
-        <h2>Share This with Ganesh</h2>
-
-        <p class="tab-share-description">
-          Here's what you've selected in this tab.
-          Check your answers before sharing.
-        </p>
-
-        <p class="tab-share-ready">
-          ✓ Your selected answers are ready ♡
-        </p>
-
-        <div class="tab-share-preview"></div>
-
-        <input
-          class="tab-share-link"
-          type="text"
-          readonly
-          aria-label="Generated report link"
-        >
-
-        <button type="button" class="tab-share-copy">
-          ♡ Copy Report Link
-        </button>
-
-        <button type="button" class="tab-share-send">
-          ♡ Send to Ganesh
-        </button>
-
-        <p class="tab-share-status">
-          Your report link will be generated automatically.
-        </p>
-      </div>
-    `;
-
-    const backButton = page.querySelector(".dynamic-back-wrap");
-
-    if (backButton) {
-      page.insertBefore(panel, backButton);
-    } else {
-      page.appendChild(panel);
-    }
-
-    const openButton = panel.querySelector(".tab-share-open");
-    const content = panel.querySelector(".tab-share-content");
-    const preview = panel.querySelector(".tab-share-preview");
-    const linkBox = panel.querySelector(".tab-share-link");
-    const copyButton = panel.querySelector(".tab-share-copy");
-    const sendButton = panel.querySelector(".tab-share-send");
-    const status = panel.querySelector(".tab-share-status");
-
-    function updatePreview() {
-      preview.textContent = buildReport(tab);
-    }
-
-    openButton.addEventListener("click", () => {
-      const isOpen = content.classList.toggle("open");
-
-      openButton.textContent = isOpen
-        ? "♡ Close sharing preview"
-        : "♡ Share with Ganesh";
-
-      if (isOpen) updatePreview();
+      if (wrapper) wrapper.remove();
     });
 
-    page.addEventListener("change", () => {
-      if (content.classList.contains("open")) {
-        updatePreview();
+    document.querySelectorAll(".tab-share-card").forEach(panel => {
+      panel.remove();
+    });
+  }
+
+  function createCentralShareCenter() {
+    const page = document.getElementById("share");
+    if (!page) return;
+
+    const oldCard = page.querySelector(".form-card");
+    if (!oldCard) return;
+
+    const card = document.createElement("div");
+    card.className = "central-share-card";
+
+    card.innerHTML = `
+      <p class="central-share-eyebrow">A LITTLE MESSAGE FOR GANESH ♡</p>
+
+      <h2>Choose What You Want to Share</h2>
+
+      <p class="central-share-description">
+        Select one or more tabs. Only the information from your selected
+        tabs will be included in your report.
+      </p>
+
+      <span class="central-share-label">SELECT YOUR TABS ♡</span>
+
+      <div class="central-share-grid">
+        ${tabs.map(tab => `
+          <label class="central-share-option">
+            <input
+              type="checkbox"
+              value="${tab.id}"
+              class="central-share-checkbox"
+            >
+            <span>${tab.emoji} ${tab.title}</span>
+          </label>
+        `).join("")}
+      </div>
+
+      <div class="central-share-private">
+        🔒 Diary is private and cannot be shared.
+        Your diary entries will never be included in this report.
+      </div>
+
+      <span class="central-share-label">YOUR REPORT PREVIEW ♡</span>
+
+      <div class="central-share-preview"></div>
+
+      <div class="central-share-actions">
+        <button type="button" class="central-share-button generate-report">
+          ♡ Generate One Report Link
+        </button>
+
+        <button type="button" class="central-share-button secondary copy-report">
+          ♡ Copy Link
+        </button>
+      </div>
+
+      <input
+        class="central-share-link"
+        type="text"
+        readonly
+        aria-label="Generated report link"
+      >
+
+      <p class="central-share-status">
+        Select your tabs to see the preview here ♡
+      </p>
+    `;
+
+    oldCard.replaceWith(card);
+
+    const preview = card.querySelector(".central-share-preview");
+    const linkBox = card.querySelector(".central-share-link");
+    const generateButton = card.querySelector(".generate-report");
+    const copyButton = card.querySelector(".copy-report");
+    const status = card.querySelector(".central-share-status");
+
+    copyButton.style.display = "none";
+
+    card.querySelectorAll(".central-share-checkbox").forEach(input => {
+      input.addEventListener("change", () => {
+        if (input.checked) {
+          selectedTabs.add(input.value);
+        } else {
+          selectedTabs.delete(input.value);
+        }
+
+        linkBox.style.display = "none";
+        copyButton.style.display = "none";
+        linkBox.value = "";
+
+        updatePreview(preview);
+
+        status.textContent = selectedTabs.size
+          ? `${selectedTabs.size} tab(s) selected. Check your preview ♡`
+          : "Select your tabs to see the preview here ♡";
+      });
+    });
+
+    generateButton.addEventListener("click", async () => {
+      if (selectedTabs.size === 0) {
+        status.textContent = "Please select at least one tab first. ♡";
+        return;
       }
+
+      const report = buildReport();
+      const reportLink = generateReportLink(report);
+
+      linkBox.value = reportLink;
+      linkBox.style.display = "block";
+      copyButton.style.display = "block";
+
+      const copied = await copyText(reportLink);
+
+      status.textContent = copied
+        ? "♡ Your report link is ready and copied! Open Messenger and paste it."
+        : "♡ Your report link is ready. Use the Copy Link button below.";
+
+      window.open(MESSENGER_URL, "_blank");
     });
 
     copyButton.addEventListener("click", async () => {
@@ -497,73 +703,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const copied = await copyText(linkBox.value);
 
       status.textContent = copied
-        ? "♡ Link copied! Paste it into Messenger."
+        ? "♡ Link copied! Now paste it into Messenger."
         : "Please select and copy the link manually.";
     });
-
-    sendButton.addEventListener("click", async () => {
-      updatePreview();
-
-      const report = preview.textContent.trim();
-
-      if (!report) {
-        status.textContent = "There is no report to share yet. ♡";
-        return;
-      }
-
-      const reportLink = generateReportLink(report);
-
-      linkBox.value = reportLink;
-      linkBox.style.display = "block";
-      copyButton.style.display = "block";
-
-      // Open Messenger immediately.
-      const messengerWindow = window.open(
-        MESSENGER_URL,
-        "_blank"
-      );
-
-      // Automatically try copying the link.
-      const copied = await copyText(reportLink);
-
-      status.textContent = copied
-        ? "♡ Link copied! Paste it into Messenger and send."
-        : "♡ Link ready! Copy it using the button above.";
-
-      if (!messengerWindow) {
-        status.textContent +=
-          " Messenger popup was blocked. Please open Messenger manually.";
-      }
-    });
-  }
-
-  function createDiaryNote() {
-    const page = document.getElementById("diary");
-
-    if (!page || page.querySelector(".tab-share-card")) return;
-
-    const panel = document.createElement("section");
-    panel.className = "tab-share-card";
-
-    panel.innerHTML = `
-      <p class="tab-share-eyebrow">YOUR PRIVATE SPACE ♡</p>
-
-      <h2>Always Just Yours</h2>
-
-      <p class="tab-share-private">
-        Your diary is completely private.<br>
-        Nothing written here will be included in any report
-        or shared with Ganesh. ♡
-      </p>
-    `;
-
-    const backButton = page.querySelector(".dynamic-back-wrap");
-
-    if (backButton) {
-      page.insertBefore(panel, backButton);
-    } else {
-      page.appendChild(panel);
-    }
   }
 
   function initialise() {
@@ -572,21 +714,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (showSharedReport()) return;
 
     removeOldShareControls();
-
-    tabs.forEach(createPanel);
-    createDiaryNote();
+    createCentralShareCenter();
   }
 
   initialise();
-
-  // Support dynamically created tabs.
-  const observer = new MutationObserver(() => {
-    if (window.location.hash.startsWith("#shared-report=")) return;
-    initialise();
-  });
-
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
 });
