@@ -69,7 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       .tab-share-open,
-      .tab-share-send {
+      .tab-share-send,
+      .tab-share-copy {
         width: 100%;
         padding: 15px 20px;
         border: 0;
@@ -83,7 +84,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       .tab-share-open:hover,
-      .tab-share-send:hover {
+      .tab-share-send:hover,
+      .tab-share-copy:hover {
         transform: translateY(-2px);
         box-shadow: 0 7px 18px rgba(201,104,137,.2);
       }
@@ -141,6 +143,27 @@ document.addEventListener("DOMContentLoaded", () => {
         line-height: 1.8;
       }
 
+      .tab-share-link {
+        display: none;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 14px;
+        padding: 13px;
+        border: 1px solid #e9b5c7;
+        border-radius: 12px;
+        background: white;
+        color: #59454e;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+      }
+
+      .tab-share-copy {
+        display: none;
+        margin-top: 10px;
+        padding: 12px;
+        font-size: 13px;
+      }
+
       .tab-share-send {
         margin-top: 17px;
       }
@@ -150,6 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
         font-size: 13px;
         line-height: 1.6;
         margin-top: 12px;
+        overflow-wrap: anywhere;
       }
 
       .tab-share-private {
@@ -158,8 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
         font-size: 14px;
         line-height: 1.8;
       }
-
-      /* SHARED REPORT VIEW */
 
       .shared-report-screen {
         position: fixed;
@@ -230,7 +252,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.head.appendChild(style);
   }
 
-  // Remove old sharing controls.
   function removeOldShareControls() {
     document.querySelectorAll("[data-share]").forEach(input => {
       const wrapper = input.closest("label") || input.parentElement;
@@ -247,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Build selected answers only.
+  // Only selected answers from the current tab.
   function buildReport(tab) {
     const state = readState();
 
@@ -288,13 +309,13 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
+    // Diary is never included.
     lines.push("━━━━━━━━━━━━━━━━━━━━");
     lines.push("Made with love ♡");
 
     return lines.join("\n");
   }
 
-  // Generate a URL containing the report itself.
   function generateReportLink(report) {
     const baseURL =
       window.location.origin +
@@ -304,7 +325,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return baseURL + "#shared-report=" + encodeURIComponent(report);
   }
 
-  // Display report when someone opens the generated URL.
   function showSharedReport() {
     const hash = window.location.hash;
 
@@ -353,6 +373,32 @@ document.addEventListener("DOMContentLoaded", () => {
     return true;
   }
 
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (error) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      let copied = false;
+
+      try {
+        copied = document.execCommand("copy");
+      } catch {
+        copied = false;
+      }
+
+      textarea.remove();
+      return copied;
+    }
+  }
+
   function createPanel(tab) {
     const page = document.getElementById(tab.id);
 
@@ -384,6 +430,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <div class="tab-share-preview"></div>
 
+        <input
+          class="tab-share-link"
+          type="text"
+          readonly
+          aria-label="Generated report link"
+        >
+
+        <button type="button" class="tab-share-copy">
+          ♡ Copy Report Link
+        </button>
+
         <button type="button" class="tab-share-send">
           ♡ Send to Ganesh
         </button>
@@ -405,6 +462,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const openButton = panel.querySelector(".tab-share-open");
     const content = panel.querySelector(".tab-share-content");
     const preview = panel.querySelector(".tab-share-preview");
+    const linkBox = panel.querySelector(".tab-share-link");
+    const copyButton = panel.querySelector(".tab-share-copy");
     const sendButton = panel.querySelector(".tab-share-send");
     const status = panel.querySelector(".tab-share-status");
 
@@ -419,13 +478,28 @@ document.addEventListener("DOMContentLoaded", () => {
         ? "♡ Close sharing preview"
         : "♡ Share with Ganesh";
 
-      if (isOpen) updatePreview();
+      if (isOpen) {
+        updatePreview();
+      }
     });
 
     page.addEventListener("change", () => {
       if (content.classList.contains("open")) {
         updatePreview();
       }
+    });
+
+    copyButton.addEventListener("click", async () => {
+      if (!linkBox.value) {
+        status.textContent = "Please generate your report link first. ♡";
+        return;
+      }
+
+      const copied = await copyText(linkBox.value);
+
+      status.textContent = copied
+        ? "♡ Report link copied! Now paste it into Messenger."
+        : "Please select and copy the link shown above.";
     });
 
     sendButton.addEventListener("click", async () => {
@@ -440,45 +514,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const reportLink = generateReportLink(report);
 
-      // Open Messenger immediately from the button click.
+      // Show the generated link on the page.
+      linkBox.value = reportLink;
+      linkBox.style.display = "block";
+      copyButton.style.display = "block";
+
+      // Open Messenger from the user's button click.
       const messengerWindow = window.open(
         MESSENGER_URL,
         "_blank"
       );
 
-      try {
-        await navigator.clipboard.writeText(reportLink);
+      const copied = await copyText(reportLink);
 
+      if (copied) {
         status.textContent =
-          "♡ Your report link is ready and copied! Paste it into Ganesh's Messenger chat and send.";
-      } catch (error) {
-        // Fallback copy method.
-        const textarea = document.createElement("textarea");
-        textarea.value = reportLink;
-        textarea.style.position = "fixed";
-        textarea.style.opacity = "0";
-
-        document.body.appendChild(textarea);
-        textarea.select();
-
-        let copied = false;
-
-        try {
-          copied = document.execCommand("copy");
-        } catch {
-          copied = false;
-        }
-
-        textarea.remove();
-
-        status.textContent = copied
-          ? "♡ Your report link is copied! Paste it into Messenger and send."
-          : "Please copy this link manually: " + reportLink;
+          "♡ Report link generated and copied! Paste it into Messenger and send.";
+      } else {
+        status.textContent =
+          "♡ Report link generated! Copy the link shown above and send it in Messenger.";
       }
 
       if (!messengerWindow) {
         status.textContent +=
-          " Messenger was blocked by your browser. Please allow pop-ups.";
+          " Messenger popup was blocked. Please open Messenger manually.";
       }
     });
   }
@@ -515,7 +574,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function initialise() {
     addStyles();
 
-    // If this is a report link, show only the report.
     if (showSharedReport()) return;
 
     removeOldShareControls();
