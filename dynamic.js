@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let soundOn = localStorage.getItem("sharmilaSound") !== "off";
 
-  const datingMusic = new Audio("music/dating-song.mp3");
+  const datingMusic = new Audio("dating-song.mp3");
   datingMusic.loop = true;
   datingMusic.volume = 0.35;
 
