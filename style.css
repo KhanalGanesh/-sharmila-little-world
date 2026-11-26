@@ -130,3 +130,10 @@ footer span{color:var(--pink)}
  .surprise-wrap{padding:35px 15px}
  .surprise-box{font-size:75px}
 }
+
+/* Hide all floating icons before login */
+body.site-locked #pinkIconStack,
+body.site-locked #ganeshReminder {
+  display: none !important;
+}
+
