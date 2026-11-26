@@ -4,168 +4,298 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Sharmila | My Little World</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="dynamic.css">
 <link rel="stylesheet" href="play-games.css">
-
-<!-- New appearance and feature styles -->
 <link rel="stylesheet" href="appearance.css">
 <link rel="stylesheet" href="world-features.css">
+
 </head>
 
 <body>
 
+<!-- =====================================
+     HEADER / NAVIGATION
+===================================== -->
+
 <header class="topbar">
+
   <a class="brand" href="#" data-page="home">
     SHARMILA<span>.</span>
     <small>MY LITTLE WORLD</small>
   </a>
 
   <nav class="nav">
-    <button class="nav-link active" data-page="home">Home</button>
-    <button class="nav-link" data-page="fashion">Fashion</button>
-    <button class="nav-link" data-page="hobbies">Hobbies</button>
-    <button class="nav-link" data-page="dreams">Dreams</button>
-    <button class="nav-link" data-page="moments">Moments</button>
-    <button class="nav-link" data-page="dating">Dating</button>
-    <button class="nav-link" data-page="play">Play</button>
-    <button class="nav-link" data-page="diary">Diary</button>
-    <button class="nav-link" data-page="surprise">Surprise</button>
+
+    <button class="nav-link active" data-page="home" type="button">
+      Home
+    </button>
+
+    <button class="nav-link" data-page="fashion" type="button">
+      Fashion
+    </button>
+
+    <button class="nav-link" data-page="hobbies" type="button">
+      Hobbies
+    </button>
+
+    <button class="nav-link" data-page="dreams" type="button">
+      Dreams
+    </button>
+
+    <button class="nav-link" data-page="moments" type="button">
+      Moments
+    </button>
+
+    <button class="nav-link" data-page="dating" type="button">
+      Dating
+    </button>
+
+    <button class="nav-link" data-page="play" type="button">
+      Play
+    </button>
+
+    <button class="nav-link" data-page="diary" type="button">
+      Diary
+    </button>
+
+    <button class="nav-link" data-page="surprise" type="button">
+      Surprise
+    </button>
+
+    <button class="nav-link" id="navMusicToggle" type="button">
+      ♫ Music
+    </button>
+
   </nav>
 
-  <button class="share-top" id="openShare">♡ Share</button>
-  <button class="menu-toggle" id="menuToggle">☰</button>
+  <button class="share-top" id="openShare" type="button">
+    ♡ Share
+  </button>
+
+  <button
+    class="menu-toggle"
+    id="menuToggle"
+    type="button"
+    aria-label="Open navigation menu"
+    aria-expanded="false"
+  >
+    ☰
+  </button>
+
 </header>
+
+
+<!-- =====================================
+     MAIN CONTENT
+===================================== -->
 
 <main class="shell">
 
-<!-- HOME -->
+
+<!-- =====================================
+     HOME
+===================================== -->
+
 <section id="home" class="page active">
 
   <div class="welcome-panel">
+
     <div class="welcome-copy">
-      <p class="eyebrow">A LITTLE SPACE JUST FOR YOU</p>
-      <h1>Hello, Sharmila <span>♡</span></h1>
+
+      <p class="eyebrow">
+        A LITTLE SPACE JUST FOR YOU
+      </p>
+
+      <h1>
+        Hello, Sharmila <span>♡</span>
+      </h1>
+
       <p class="lead">
         Your world, your style, your story.
         Explore the little things that make you, you.
       </p>
-      <button class="primary-btn" data-go="fashion">
+
+      <button class="primary-btn" data-go="fashion" type="button">
         Explore your world ↗
       </button>
-      <p class="made">Made with love & creativity · BY GANESH ♡</p>
+
+      <p class="made">
+        Made with love & creativity · BY GANESH ♡
+      </p>
+
     </div>
 
     <div class="welcome-art">
+
       <div class="art-circle">✿</div>
+
       <span class="spark s1">✧</span>
       <span class="spark s2">♡</span>
       <span class="spark s3">✦</span>
-      <p>your little<br><em>universe</em></p>
+
+      <p>
+        your little<br>
+        <em>universe</em>
+      </p>
+
     </div>
+
   </div>
+
 
   <div class="section-heading">
+
     <div>
-      <p class="eyebrow">DISCOVER SOMETHING NEW</p>
+      <p class="eyebrow">
+        DISCOVER SOMETHING NEW
+      </p>
+
       <h2>Explore your world</h2>
     </div>
-    <span class="muted">Choose a space to begin</span>
+
+    <span class="muted">
+      Choose a space to begin
+    </span>
+
   </div>
 
+
   <div class="feature-grid">
-    <button class="feature-card" data-go="fashion">
+
+    <button class="feature-card" data-go="fashion" type="button">
       <span class="feature-icon">👗</span>
       <span class="feature-title">Fashion Studio</span>
       <span class="feature-desc">Find your personal style</span>
       <span class="card-arrow">↗</span>
     </button>
 
-    <button class="feature-card" data-go="hobbies">
+    <button class="feature-card" data-go="hobbies" type="button">
       <span class="feature-icon">🎨</span>
       <span class="feature-title">Hobbies & Interests</span>
       <span class="feature-desc">Discover what you love</span>
       <span class="card-arrow">↗</span>
     </button>
 
-    <button class="feature-card" data-go="dreams">
+    <button class="feature-card" data-go="dreams" type="button">
       <span class="feature-icon">🌷</span>
       <span class="feature-title">Dreams & Future</span>
       <span class="feature-desc">Imagine your dream life</span>
       <span class="card-arrow">↗</span>
     </button>
 
-    <button class="feature-card" data-go="moments">
+    <button class="feature-card" data-go="moments" type="button">
       <span class="feature-icon">📸</span>
       <span class="feature-title">Special Moments</span>
       <span class="feature-desc">Keep your memories close</span>
       <span class="card-arrow">↗</span>
     </button>
 
-    <button class="feature-card" data-go="dating">
+    <button class="feature-card" data-go="dating" type="button">
       <span class="feature-icon">💗</span>
       <span class="feature-title">Dating & Love</span>
       <span class="feature-desc">Plan your perfect date</span>
       <span class="card-arrow">↗</span>
     </button>
 
-    <button class="feature-card" data-go="play">
+    <button class="feature-card" data-go="play" type="button">
       <span class="feature-icon">✨</span>
       <span class="feature-title">Play & Discover</span>
       <span class="feature-desc">Quizzes and fun choices</span>
       <span class="card-arrow">↗</span>
     </button>
 
-    <button class="feature-card" data-go="diary">
+    <button class="feature-card" data-go="diary" type="button">
       <span class="feature-icon">📖</span>
       <span class="feature-title">My Little Diary</span>
       <span class="feature-desc">Your private thoughts</span>
       <span class="card-arrow">↗</span>
     </button>
 
-    <button class="feature-card surprise-card" data-go="surprise">
+    <button class="feature-card surprise-card" data-go="surprise" type="button">
       <span class="feature-icon">🎁</span>
       <span class="feature-title">Surprise Box</span>
       <span class="feature-desc">Open a little surprise</span>
       <span class="card-arrow">↗</span>
     </button>
+
   </div>
 
+
   <div class="daily-note">
+
     <span class="note-icon">♡</span>
+
     <div>
-      <p class="eyebrow">A LITTLE REMINDER</p>
-      <strong>You don't have to be anyone else. Your own story is beautiful.</strong>
+      <p class="eyebrow">
+        A LITTLE REMINDER
+      </p>
+
+      <strong>
+        You don't have to be anyone else. Your own story is beautiful.
+      </strong>
     </div>
+
   </div>
 
 </section>
 
-<!-- FASHION -->
+
+<!-- =====================================
+     FASHION
+===================================== -->
+
 <section id="fashion" class="page">
 
-  <button class="back-btn" data-go="home">← Back to Home</button>
+  <button class="back-btn" data-go="home" type="button">
+    ← Back to Home
+  </button>
 
   <div class="page-hero">
-    <p class="eyebrow">01 · YOUR PERSONAL STYLE</p>
-    <h1>Fashion Studio <span>✿</span></h1>
-    <p>Let's find the style that feels most like you.</p>
+
+    <p class="eyebrow">
+      01 · YOUR PERSONAL STYLE
+    </p>
+
+    <h1>
+      Fashion Studio <span>✿</span>
+    </h1>
+
+    <p>
+      Let's find the style that feels most like you.
+    </p>
+
   </div>
 
+
   <div class="form-card">
+
     <h2>Build your fashion identity</h2>
-    <p class="muted">Choose up to 4 options in each category.</p>
+
+    <p class="muted">
+      Choose up to 4 options in each category.
+    </p>
 
     <div id="fashionFields" class="field-grid"></div>
 
     <div class="form-actions">
-      <button class="primary-btn" data-result="fashion">Generate my style ✨</button>
-      <button class="text-btn" data-reset="fashion">Reset choices</button>
+
+      <button class="primary-btn" data-result="fashion" type="button">
+        Generate my style ✨
+      </button>
+
+      <button class="text-btn" data-reset="fashion" type="button">
+        Reset choices
+      </button>
+
     </div>
 
     <div id="fashionResult" class="result-box hidden"></div>
@@ -174,33 +304,61 @@
       <input type="checkbox" data-share="fashion">
       I want to share this result with Ganesh
     </label>
+
   </div>
 
-  <!-- Fashion related extras will be added here -->
   <div id="fashionExtras"></div>
 
 </section>
 
-<!-- HOBBIES -->
+
+<!-- =====================================
+     HOBBIES
+===================================== -->
+
 <section id="hobbies" class="page">
 
-  <button class="back-btn" data-go="home">← Back to Home</button>
+  <button class="back-btn" data-go="home" type="button">
+    ← Back to Home
+  </button>
 
   <div class="page-hero">
-    <p class="eyebrow">02 · THINGS THAT MAKE YOU HAPPY</p>
-    <h1>Hobbies & Interests <span>♡</span></h1>
-    <p>Pick the little things you enjoy or want to try.</p>
+
+    <p class="eyebrow">
+      02 · THINGS THAT MAKE YOU HAPPY
+    </p>
+
+    <h1>
+      Hobbies & Interests <span>♡</span>
+    </h1>
+
+    <p>
+      Pick the little things you enjoy or want to try.
+    </p>
+
   </div>
 
+
   <div class="form-card">
+
     <h2>What are you into?</h2>
-    <p class="muted">Choose up to 4 options in each category.</p>
+
+    <p class="muted">
+      Choose up to 4 options in each category.
+    </p>
 
     <div id="hobbiesFields" class="field-grid"></div>
 
     <div class="form-actions">
-      <button class="primary-btn" data-result="hobbies">Show my interests ✨</button>
-      <button class="text-btn" data-reset="hobbies">Reset choices</button>
+
+      <button class="primary-btn" data-result="hobbies" type="button">
+        Show my interests ✨
+      </button>
+
+      <button class="text-btn" data-reset="hobbies" type="button">
+        Reset choices
+      </button>
+
     </div>
 
     <div id="hobbiesResult" class="result-box hidden"></div>
@@ -209,33 +367,61 @@
       <input type="checkbox" data-share="hobbies">
       I want to share this result with Ganesh
     </label>
+
   </div>
 
-  <!-- Hobby related extras will be added here -->
   <div id="hobbiesExtras"></div>
 
 </section>
 
-<!-- DREAMS -->
+
+<!-- =====================================
+     DREAMS
+===================================== -->
+
 <section id="dreams" class="page">
 
-  <button class="back-btn" data-go="home">← Back to Home</button>
+  <button class="back-btn" data-go="home" type="button">
+    ← Back to Home
+  </button>
 
   <div class="page-hero">
-    <p class="eyebrow">03 · YOUR FUTURE, YOUR WAY</p>
-    <h1>Dreams & Future <span>🌷</span></h1>
-    <p>There is no right-sized dream. Make a little space for yours.</p>
+
+    <p class="eyebrow">
+      03 · YOUR FUTURE, YOUR WAY
+    </p>
+
+    <h1>
+      Dreams & Future <span>🌷</span>
+    </h1>
+
+    <p>
+      There is no right-sized dream. Make a little space for yours.
+    </p>
+
   </div>
 
+
   <div class="form-card">
+
     <h2>Create your dream board</h2>
-    <p class="muted">Choose up to 4 options in each category.</p>
+
+    <p class="muted">
+      Choose up to 4 options in each category.
+    </p>
 
     <div id="dreamsFields" class="field-grid"></div>
 
     <div class="form-actions">
-      <button class="primary-btn" data-result="dreams">Create my dream board ✨</button>
-      <button class="text-btn" data-reset="dreams">Reset choices</button>
+
+      <button class="primary-btn" data-result="dreams" type="button">
+        Create my dream board ✨
+      </button>
+
+      <button class="text-btn" data-reset="dreams" type="button">
+        Reset choices
+      </button>
+
     </div>
 
     <div id="dreamsResult" class="result-box hidden"></div>
@@ -244,44 +430,80 @@
       <input type="checkbox" data-share="dreams">
       I want to share this result with Ganesh
     </label>
+
   </div>
 
-  <!-- Dream related extras will be added here -->
   <div id="dreamsExtras"></div>
 
 </section>
 
-<!-- MOMENTS -->
+
+<!-- =====================================
+     MOMENTS
+===================================== -->
+
 <section id="moments" class="page">
 
-  <button class="back-btn" data-go="home">← Back to Home</button>
+  <button class="back-btn" data-go="home" type="button">
+    ← Back to Home
+  </button>
 
   <div class="page-hero">
-    <p class="eyebrow">04 · LITTLE THINGS WORTH KEEPING</p>
-    <h1>Special Moments <span>📸</span></h1>
-    <p>Save a memory or a date you never want to forget.</p>
+
+    <p class="eyebrow">
+      04 · LITTLE THINGS WORTH KEEPING
+    </p>
+
+    <h1>
+      Special Moments <span>📸</span>
+    </h1>
+
+    <p>
+      Save a memory or a date you never want to forget.
+    </p>
+
   </div>
 
+
   <div class="form-card">
+
     <h2>Your memory scrapbook</h2>
 
     <label>
       Memory title
-      <input id="memoryTitle" type="text" placeholder="A day I want to remember">
+
+      <input
+        id="memoryTitle"
+        type="text"
+        placeholder="A day I want to remember"
+      >
     </label>
 
     <label>
       Memory date
-      <input id="memoryDate" type="date">
+
+      <input
+        id="memoryDate"
+        type="date"
+      >
     </label>
 
     <label>
       Why is it special?
-      <textarea id="memoryText" rows="3" placeholder="Write a little about this memory..."></textarea>
+
+      <textarea
+        id="memoryText"
+        rows="3"
+        placeholder="Write a little about this memory..."
+      ></textarea>
     </label>
 
     <div class="form-actions">
-      <button class="primary-btn" id="saveMemory">＋ Save this memory</button>
+
+      <button class="primary-btn" id="saveMemory" type="button">
+        ＋ Save this memory
+      </button>
+
     </div>
 
     <div id="memoryList" class="memory-list"></div>
@@ -290,52 +512,92 @@
       <input type="checkbox" data-share="moments">
       I want to share my saved memories with Ganesh
     </label>
+
   </div>
 
-  <!-- Moments related extras will be added here -->
   <div id="momentsExtras"></div>
 
 </section>
 
-<!-- DATING -->
+
+<!-- =====================================
+     DATING
+===================================== -->
+
 <section id="dating" class="page">
 
-  <button class="back-btn" data-go="home">← Back to Home</button>
+  <button class="back-btn" data-go="home" type="button">
+    ← Back to Home
+  </button>
 
   <div class="page-hero">
-    <p class="eyebrow">05 · YOUR KIND OF CONNECTION</p>
-    <h1>Dating & Love <span>💗</span></h1>
-    <p>Plan a date that feels special to you.</p>
+
+    <p class="eyebrow">
+      05 · YOUR KIND OF CONNECTION
+    </p>
+
+    <h1>
+      Dating & Love <span>💗</span>
+    </h1>
+
+    <p>
+      Plan a date that feels special to you.
+    </p>
+
   </div>
 
+
   <div class="form-card">
+
     <h2>Plan your perfect date</h2>
-    <p class="muted">Choose a date, time and the kind of experience you would enjoy.</p>
+
+    <p class="muted">
+      Choose a date, time and the kind of experience you would enjoy.
+    </p>
+
 
     <div class="date-planner">
+
       <div class="date-planner-heading">
+
         <span>🌸</span>
+
         <div>
           <strong>Your date plan</strong>
           <small>Pick a day for something lovely</small>
         </div>
+
       </div>
 
+
       <div class="input-row">
+
         <label>
           Choose date
-          <input id="datePlan" type="date">
+
+          <input
+            id="datePlan"
+            type="date"
+          >
         </label>
 
         <label>
           Choose time
-          <input id="dateTime" type="time">
+
+          <input
+            id="dateTime"
+            type="time"
+          >
         </label>
+
       </div>
+
 
       <label>
         Where would you like to go?
+
         <select id="datePlace">
+
           <option value="">Choose a place</option>
           <option>Cute cafe</option>
           <option>Romantic dinner</option>
@@ -345,17 +607,30 @@
           <option>Amusement park</option>
           <option>Shopping and dessert</option>
           <option>Surprise destination</option>
+
         </select>
+
       </label>
+
     </div>
 
-    <h2 class="subheading">Your date preferences</h2>
+
+    <h2 class="subheading">
+      Your date preferences
+    </h2>
 
     <div id="datingFields" class="field-grid"></div>
 
     <div class="form-actions">
-      <button class="primary-btn" data-result="dating">Create my date plan 💗</button>
-      <button class="text-btn" data-reset="dating">Reset choices</button>
+
+      <button class="primary-btn" data-result="dating" type="button">
+        Create my date plan 💗
+      </button>
+
+      <button class="text-btn" data-reset="dating" type="button">
+        Reset choices
+      </button>
+
     </div>
 
     <div id="datingResult" class="result-box hidden"></div>
@@ -364,33 +639,61 @@
       <input type="checkbox" data-share="dating">
       I want to share this result with Ganesh
     </label>
+
   </div>
 
-  <!-- Dating related extras will be added here -->
   <div id="datingExtras"></div>
 
 </section>
 
-<!-- PLAY -->
+
+<!-- =====================================
+     PLAY
+===================================== -->
+
 <section id="play" class="page">
 
-  <button class="back-btn" data-go="home">← Back to Home</button>
+  <button class="back-btn" data-go="home" type="button">
+    ← Back to Home
+  </button>
 
   <div class="page-hero">
-    <p class="eyebrow">06 · JUST FOR FUN</p>
-    <h1>Play & Discover <span>✨</span></h1>
-    <p>Quick choices and a tiny peek at your personality.</p>
+
+    <p class="eyebrow">
+      06 · JUST FOR FUN
+    </p>
+
+    <h1>
+      Play & Discover <span>✨</span>
+    </h1>
+
+    <p>
+      Quick choices and a tiny peek at your personality.
+    </p>
+
   </div>
 
+
   <div class="form-card">
+
     <h2>This or That?</h2>
-    <p class="muted">Choose one from each pair.</p>
+
+    <p class="muted">
+      Choose one from each pair.
+    </p>
 
     <div id="playFields" class="field-grid"></div>
 
     <div class="form-actions">
-      <button class="primary-btn" data-result="play">Reveal my vibe ✨</button>
-      <button class="text-btn" data-reset="play">Start again</button>
+
+      <button class="primary-btn" data-result="play" type="button">
+        Reveal my vibe ✨
+      </button>
+
+      <button class="text-btn" data-reset="play" type="button">
+        Start again
+      </button>
+
     </div>
 
     <div id="playResult" class="result-box hidden"></div>
@@ -399,101 +702,206 @@
       <input type="checkbox" data-share="play">
       I want to share my quiz result with Ganesh
     </label>
+
   </div>
 
-  <!-- Mini games and video features will be added here -->
   <div id="playExtras"></div>
 
 </section>
 
-<!-- DIARY -->
+
+<!-- =====================================
+     DIARY
+===================================== -->
+
 <section id="diary" class="page">
 
-  <button class="back-btn" data-go="home">← Back to Home</button>
+  <button class="back-btn" data-go="home" type="button">
+    ← Back to Home
+  </button>
 
   <div class="page-hero">
-    <p class="eyebrow">07 · JUST BETWEEN YOU AND YOURSELF</p>
-    <h1>My Little Diary <span>📖</span></h1>
-    <p>A private corner for your thoughts. This diary is not shared.</p>
+
+    <p class="eyebrow">
+      07 · JUST BETWEEN YOU AND YOURSELF
+    </p>
+
+    <h1>
+      My Little Diary <span>📖</span>
+    </h1>
+
+    <p>
+      A private corner for your thoughts. This diary is not shared.
+    </p>
+
   </div>
 
+
   <div class="form-card">
+
     <h2>How are you feeling today?</h2>
 
     <div class="mood-row">
-      <button class="mood" data-mood="Happy">😊<span>Happy</span></button>
-      <button class="mood" data-mood="Calm">🌿<span>Calm</span></button>
-      <button class="mood" data-mood="Tired">😴<span>Tired</span></button>
-      <button class="mood" data-mood="Sad">🌧️<span>Sad</span></button>
-      <button class="mood" data-mood="Excited">🥰<span>Excited</span></button>
+
+      <button class="mood" data-mood="Happy" type="button">
+        😊<span>Happy</span>
+      </button>
+
+      <button class="mood" data-mood="Calm" type="button">
+        🌿<span>Calm</span>
+      </button>
+
+      <button class="mood" data-mood="Tired" type="button">
+        😴<span>Tired</span>
+      </button>
+
+      <button class="mood" data-mood="Sad" type="button">
+        🌧️<span>Sad</span>
+      </button>
+
+      <button class="mood" data-mood="Excited" type="button">
+        🥰<span>Excited</span>
+      </button>
+
     </div>
+
 
     <label>
       Your private note
-      <textarea id="diaryText" rows="5" placeholder="Write whatever is on your mind..."></textarea>
+
+      <textarea
+        id="diaryText"
+        rows="5"
+        placeholder="Write whatever is on your mind..."
+      ></textarea>
     </label>
 
+
     <div class="form-actions">
-      <button class="primary-btn" id="saveDiary">Save privately ♡</button>
+
+      <button class="primary-btn" id="saveDiary" type="button">
+        Save privately ♡
+      </button>
+
     </div>
+
 
     <p class="privacy-note">
       🔒 Diary entries stay on this browser and are never included in sharing.
     </p>
 
     <div id="diaryList" class="memory-list"></div>
+
   </div>
 
 </section>
 
-<!-- SURPRISE BOX -->
+
+<!-- =====================================
+     SURPRISE BOX
+===================================== -->
+
 <section id="surprise" class="page">
 
-  <button class="back-btn" data-go="home">← Back to Home</button>
+  <button class="back-btn" data-go="home" type="button">
+    ← Back to Home
+  </button>
 
   <div class="page-hero">
-    <p class="eyebrow">08 · A LITTLE MAGIC</p>
-    <h1>Surprise Box <span>🎁</span></h1>
-    <p>Some days need a little sparkle. Open a box and see what you find.</p>
+
+    <p class="eyebrow">
+      08 · A LITTLE MAGIC
+    </p>
+
+    <h1>
+      Surprise Box <span>🎁</span>
+    </h1>
+
+    <p>
+      Some days need a little sparkle. Open a box and see what you find.
+    </p>
+
   </div>
 
-  <div class="surprise-wrap">
-    <div class="surprise-box" id="surpriseBox">🎁</div>
 
-    <h2 id="surpriseTitle">A little surprise is waiting...</h2>
+  <div class="surprise-wrap">
+
+    <div class="surprise-box" id="surpriseBox">
+      🎁
+    </div>
+
+    <h2 id="surpriseTitle">
+      A little surprise is waiting...
+    </h2>
 
     <p id="surpriseMessage">
       Take a breath, pick a box and let the moment surprise you.
     </p>
 
     <div class="surprise-options">
-      <button class="surprise-choice" data-surprise="0">🌸 Open box one</button>
-      <button class="surprise-choice" data-surprise="1">💌 Open box two</button>
-      <button class="surprise-choice" data-surprise="2">⭐ Open box three</button>
+
+      <button class="surprise-choice" data-surprise="0" type="button">
+        🌸 Open box one
+      </button>
+
+      <button class="surprise-choice" data-surprise="1" type="button">
+        💌 Open box two
+      </button>
+
+      <button class="surprise-choice" data-surprise="2" type="button">
+        ⭐ Open box three
+      </button>
+
     </div>
+
   </div>
 
 </section>
 
-<!-- SHARE -->
+
+<!-- =====================================
+     SHARE
+===================================== -->
+
 <section id="share" class="page">
 
-  <button class="back-btn" data-go="home">← Back to Home</button>
+  <button class="back-btn" data-go="home" type="button">
+    ← Back to Home
+  </button>
 
   <div class="page-hero">
-    <p class="eyebrow">YOUR CHOICE, ALWAYS</p>
-    <h1>Share with Ganesh <span>♡</span></h1>
-    <p>Only the results you choose to share are included.</p>
+
+    <p class="eyebrow">
+      YOUR CHOICE, ALWAYS
+    </p>
+
+    <h1>
+      Share with Ganesh <span>♡</span>
+    </h1>
+
+    <p>
+      Only the results you choose to share are included.
+    </p>
+
   </div>
 
+
   <div class="form-card">
+
     <h2>Your sharing preview</h2>
-    <p class="muted">Your diary is always excluded.</p>
+
+    <p class="muted">
+      Your diary is always excluded.
+    </p>
 
     <div id="sharePreview" class="share-preview"></div>
 
     <div class="form-actions">
-      <button class="primary-btn" id="prepareShare">Prepare selected answers</button>
+
+      <button class="primary-btn" id="prepareShare" type="button">
+        Prepare selected answers
+      </button>
+
     </div>
 
     <div id="shareStatus" class="result-box hidden"></div>
@@ -502,17 +910,29 @@
       This local demo prepares a file on this device.
       Online sharing between devices requires a secure database later.
     </p>
+
   </div>
 
 </section>
 
+
 </main>
+
+
+<!-- =====================================
+     FOOTER
+===================================== -->
 
 <footer>
   MADE WITH LOVE & CREATIVITY <span>♡</span> BY GANESH
 </footer>
 
-<!-- Existing scripts: keep their order -->
+
+<!-- =====================================
+     JAVASCRIPT FILES
+     KEEP THIS ORDER
+===================================== -->
+
 <script src="script.js"></script>
 <script src="dynamic.js"></script>
 <script src="chat.js"></script>
@@ -522,15 +942,16 @@
 <script src="tab-share.js"></script>
 <script src="access-lock.js"></script>
 
-<!-- Existing mini games -->
+<!-- MINI GAMES -->
 <script src="play-games.js"></script>
 
-<!-- New features: added in the next steps -->
+<!-- ADDITIONAL FEATURES -->
 <script src="appearance.js"></script>
 <script src="world-features.js"></script>
 <script src="fashion-preview.js"></script>
 <script src="diary-mood-theme.js"></script>
 <script src="dream-man.js"></script>
 <script src="dream-man-sound.js"></script>
+
 </body>
 </html>

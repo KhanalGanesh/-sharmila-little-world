@@ -2,21 +2,20 @@
 /* =====================================
    SHARMILA'S LITTLE WORLD
    SHARED ACCESS KEY LOCK
-   GitHub Pages - Basic Lock Only
+   SETTINGS LOGOUT ONLY ♡
 ===================================== */
 
 (() => {
   "use strict";
 
-  // CHANGE THIS TO YOUR OWN ACCESS KEY
   const ACCESS_KEY = "SHARMILA123";
-
   const SESSION_KEY = "sharmila_access_granted";
 
   function createLock() {
     document.body.classList.add("site-locked");
 
     const style = document.createElement("style");
+
     style.textContent = `
       body.site-locked > header,
       body.site-locked > main,
@@ -80,7 +79,7 @@
         border-color: #d77e9e;
       }
 
-      #accessLock button {
+      #accessLock .lock-card button {
         width: 100%;
         padding: 15px;
         border: 0;
@@ -97,21 +96,8 @@
         min-height: 20px;
         margin: 12px 0 0;
       }
-
-      #accessLogout {
-        position: fixed;
-        right: 18px;
-        bottom: 18px;
-        z-index: 99998;
-        border: 0;
-        border-radius: 30px;
-        padding: 11px 17px;
-        background: #d77e9e;
-        color: white;
-        cursor: pointer;
-        box-shadow: 0 5px 18px #0002;
-      }
     `;
+
     document.head.appendChild(style);
 
     const overlay = document.createElement("div");
@@ -122,6 +108,7 @@
         <div class="lock-icon">♡</div>
         <h1>Sharmila's Little World</h1>
         <p>A private little world. Enter your access key to continue.</p>
+
         <form id="accessForm">
           <input
             id="accessKeyInput"
@@ -130,6 +117,7 @@
             autocomplete="current-password"
             required
           >
+
           <button type="submit">Enter My World ♡</button>
           <div class="lock-error" id="accessError"></div>
         </form>
@@ -138,8 +126,13 @@
 
     document.body.appendChild(overlay);
 
-    document.getElementById("accessForm").addEventListener("submit", (e) => {
-      e.preventDefault();
+    function unlock() {
+      document.body.classList.remove("site-locked");
+      overlay.remove();
+    }
+
+    document.getElementById("accessForm").addEventListener("submit", event => {
+      event.preventDefault();
 
       const entered = document.getElementById("accessKeyInput").value;
       const error = document.getElementById("accessError");
@@ -153,23 +146,10 @@
       }
     });
 
-    function unlock() {
-      document.body.classList.remove("site-locked");
-      overlay.remove();
-
-      if (!document.getElementById("accessLogout")) {
-        const logout = document.createElement("button");
-        logout.id = "accessLogout";
-        logout.textContent = "Logout ↗";
-
-        logout.addEventListener("click", () => {
-          sessionStorage.removeItem(SESSION_KEY);
-          location.reload();
-        });
-
-        document.body.appendChild(logout);
-      }
-    }
+    document.addEventListener("world:logout", () => {
+      sessionStorage.removeItem(SESSION_KEY);
+      location.reload();
+    });
 
     if (sessionStorage.getItem(SESSION_KEY) === "yes") {
       unlock();
@@ -177,4 +157,5 @@
   }
 
   createLock();
+
 })();

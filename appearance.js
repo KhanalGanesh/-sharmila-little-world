@@ -1,7 +1,9 @@
 
 /* =========================================
    SHARMILA'S LITTLE WORLD
-   THEME, SOUND & FLOATING CONTROLS
+   THEME & SOUND SETTINGS
+   UNIFIED SETTINGS READY ♡
+   MOBILE MENU PRESERVED
 ========================================= */
 
 (() => {
@@ -29,13 +31,18 @@
 
   const create = (tag, className, text) => {
     const element = document.createElement(tag);
+
     if (className) element.className = className;
     if (text !== undefined) element.textContent = text;
+
     return element;
   };
 
+  /* ---------- AUDIO ---------- */
+
   function getAudioContext() {
-    const AudioClass = window.AudioContext || window.webkitAudioContext;
+    const AudioClass =
+      window.AudioContext || window.webkitAudioContext;
 
     if (!AudioClass) return null;
 
@@ -61,16 +68,22 @@
       const gain = context.createGain();
 
       oscillator.type = type;
+
       oscillator.frequency.setValueAtTime(
         frequency,
         context.currentTime + delay
       );
 
-      gain.gain.setValueAtTime(0, context.currentTime + delay);
+      gain.gain.setValueAtTime(
+        0,
+        context.currentTime + delay
+      );
+
       gain.gain.linearRampToValueAtTime(
         volume * 0.22,
         context.currentTime + delay + 0.015
       );
+
       gain.gain.exponentialRampToValueAtTime(
         0.001,
         context.currentTime + delay + duration
@@ -80,7 +93,10 @@
       gain.connect(context.destination);
 
       oscillator.start(context.currentTime + delay);
-      oscillator.stop(context.currentTime + delay + duration + 0.02);
+      oscillator.stop(
+        context.currentTime + delay + duration + 0.02
+      );
+
     } catch (error) {
       console.warn("Sound could not play:", error);
     }
@@ -119,9 +135,16 @@
     }
   };
 
+  /* ---------- THEME ---------- */
+
   function applyTheme(themeId, shouldSave = true) {
-    const validTheme = themes.some(theme => theme.id === themeId);
-    const selected = validTheme ? themeId : "romantic-pink";
+    const validTheme = themes.some(
+      theme => theme.id === themeId
+    );
+
+    const selected = validTheme
+      ? themeId
+      : "romantic-pink";
 
     document.body.dataset.theme = selected;
 
@@ -143,6 +166,8 @@
     );
   }
 
+  /* ---------- TOAST ---------- */
+
   function showToast(message) {
     let toast = $("#worldToast");
 
@@ -150,6 +175,7 @@
       toast = create("div", "world-toast");
       toast.id = "worldToast";
       toast.setAttribute("role", "status");
+
       document.body.appendChild(toast);
     }
 
@@ -163,27 +189,48 @@
     }, 2300);
   }
 
-  function buildThemePanel() {
-    const panel = create("div", "theme-panel");
-    panel.id = "themePanel";
-    panel.hidden = true;
+  /* ---------- UNIFIED SETTINGS CONTENT ---------- */
 
-    const heading = create("h3", "", "Choose your mood");
-    const description = create(
-      "p",
-      "",
-      "Change the look of your little world."
+  function buildSettingsContent() {
+    const section = create("div", "world-settings-section");
+    section.id = "worldSettingsSection";
+    section.hidden = true;
+
+    /* THEME AREA */
+
+    const themeHeading = create(
+      "h3",
+      "world-settings-heading",
+      "🎨 Choose your theme"
     );
 
-    const options = create("div", "theme-options");
+    const themeDescription = create(
+      "p",
+      "world-settings-description",
+      "Give your little world a different mood ♡"
+    );
+
+    const themeOptions = create(
+      "div",
+      "theme-options"
+    );
 
     themes.forEach(theme => {
       const button = create("button", "theme-option");
+
       button.type = "button";
       button.dataset.theme = theme.id;
 
-      const dot = create("span", `theme-dot ${theme.dot}`);
-      const label = create("span", "", theme.name);
+      const dot = create(
+        "span",
+        `theme-dot ${theme.dot}`
+      );
+
+      const label = create(
+        "span",
+        "",
+        theme.name
+      );
 
       button.append(dot, label);
 
@@ -193,172 +240,255 @@
         showToast(`${theme.name} theme applied ♡`);
       });
 
-      options.appendChild(button);
+      themeOptions.appendChild(button);
     });
 
-    panel.append(heading, description, options);
-    document.body.appendChild(panel);
+    /* DIVIDER */
 
-    return panel;
-  }
+    const divider = create(
+      "div",
+      "world-settings-divider"
+    );
 
-  function buildSoundPanel() {
-    const panel = create("div", "sound-panel");
-    panel.id = "soundPanel";
-    panel.hidden = true;
+    /* SOUND AREA */
 
-    const heading = create("h3", "", "Sound settings");
+    const soundHeading = create(
+      "h3",
+      "world-settings-heading",
+      "🔊 Sound effects"
+    );
 
-    const toggleLabel = create("label");
-    toggleLabel.append(
-      create("span", "", "Sound effects")
+    const soundRow = create(
+      "label",
+      "world-settings-row"
+    );
+
+    const soundText = create(
+      "span",
+      "",
+      "Website sounds"
     );
 
     const toggle = create("input");
+
     toggle.type = "checkbox";
     toggle.checked = soundEnabled;
     toggle.id = "worldSoundToggle";
 
     toggle.addEventListener("change", () => {
       soundEnabled = toggle.checked;
-      localStorage.setItem(SOUND_KEY, String(soundEnabled));
 
-      if (soundEnabled) sounds.save();
+      localStorage.setItem(
+        SOUND_KEY,
+        String(soundEnabled)
+      );
 
-      showToast(soundEnabled ? "Sounds enabled ♡" : "Sounds muted");
-      updateSoundButton();
+      if (soundEnabled) {
+        sounds.save();
+      }
+
+      showToast(
+        soundEnabled
+          ? "Sounds enabled ♡"
+          : "Sounds muted"
+      );
+
+      updateSoundSettings();
     });
 
-    toggleLabel.append(toggle);
+    soundRow.append(soundText, toggle);
 
-    const volumeLabel = create("label");
-    volumeLabel.append(create("span", "", "Volume"));
+    /* VOLUME */
 
-    const volumeValue = create("span", "", `${Math.round(volume * 100)}%`);
+    const volumeRow = create(
+      "div",
+      "world-settings-volume"
+    );
+
+    const volumeTitle = create(
+      "div",
+      "world-settings-volume-title"
+    );
+
+    const volumeText = create(
+      "span",
+      "",
+      "Volume"
+    );
+
+    const volumeValue = create(
+      "span",
+      "",
+      `${Math.round(volume * 100)}%`
+    );
+
     volumeValue.id = "worldVolumeValue";
 
-    volumeLabel.append(volumeValue);
+    volumeTitle.append(volumeText, volumeValue);
 
     const slider = create("input");
+
     slider.type = "range";
+    slider.id = "worldVolumeSlider";
     slider.min = "0";
     slider.max = "1";
     slider.step = "0.05";
     slider.value = String(volume);
-    slider.setAttribute("aria-label", "Sound volume");
+
+    slider.setAttribute(
+      "aria-label",
+      "Sound effects volume"
+    );
 
     slider.addEventListener("input", () => {
       volume = Number(slider.value);
-      localStorage.setItem(VOLUME_KEY, String(volume));
-      volumeValue.textContent = `${Math.round(volume * 100)}%`;
+
+      localStorage.setItem(
+        VOLUME_KEY,
+        String(volume)
+      );
+
+      volumeValue.textContent =
+        `${Math.round(volume * 100)}%`;
     });
 
-    panel.append(heading, toggleLabel, volumeLabel, slider);
-    document.body.appendChild(panel);
+    volumeRow.append(volumeTitle, slider);
 
-    return panel;
+    section.append(
+      themeHeading,
+      themeDescription,
+      themeOptions,
+      divider,
+      soundHeading,
+      soundRow,
+      volumeRow
+    );
+
+    document.body.appendChild(section);
+
+    return section;
   }
 
-  function updateSoundButton() {
-    const button = $("#soundControl");
+  /* ---------- UPDATE SOUND SETTINGS ---------- */
 
-    if (button) {
-      button.textContent = soundEnabled ? "♫" : "🔇";
-      button.title = soundEnabled ? "Sound settings" : "Sound is muted";
-      button.setAttribute("aria-label", button.title);
-    }
-
+  function updateSoundSettings() {
     const toggle = $("#worldSoundToggle");
+    const slider = $("#worldVolumeSlider");
+    const value = $("#worldVolumeValue");
 
     if (toggle) {
       toggle.checked = soundEnabled;
     }
+
+    if (slider) {
+      slider.value = String(volume);
+    }
+
+    if (value) {
+      value.textContent = `${Math.round(volume * 100)}%`;
+    }
   }
 
-  function buildFloatingControls() {
-    const controls = create("div", "world-controls");
-    controls.id = "worldControls";
+  /* ---------- MOBILE NAVIGATION ---------- */
 
-    const themeButton = create("button", "world-control-btn", "🎨");
-    themeButton.type = "button";
-    themeButton.title = "Change theme";
-    themeButton.setAttribute("aria-label", "Change theme");
+  function setupNavigation() {
+    const menuToggle =
+      $(".menu-toggle") || $("#menuToggle");
 
-    const soundButton = create(
-      "button",
-      "world-control-btn",
-      soundEnabled ? "♫" : "🔇"
+    const nav = $(".nav");
+
+    if (!menuToggle || !nav) {
+      console.warn(
+        "Mobile menu button or navigation was not found."
+      );
+      return;
+    }
+
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute(
+      "aria-label",
+      "Open navigation menu"
     );
 
-    soundButton.type = "button";
-    soundButton.id = "soundControl";
-    soundButton.title = "Sound settings";
-    soundButton.setAttribute("aria-label", "Sound settings");
+    menuToggle.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
 
-    const themePanel = buildThemePanel();
-    const soundPanel = buildSoundPanel();
+      const isOpen = nav.classList.toggle("open");
 
-    themeButton.addEventListener("click", () => {
-      const opening = themePanel.hidden;
+      menuToggle.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
 
-      themePanel.hidden = !opening;
-      soundPanel.hidden = true;
-
-      sounds.click();
-    });
-
-    soundButton.addEventListener("click", () => {
-      const opening = soundPanel.hidden;
-
-      soundPanel.hidden = !opening;
-      themePanel.hidden = true;
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen
+          ? "Close navigation menu"
+          : "Open navigation menu"
+      );
 
       sounds.click();
     });
 
-    controls.append(themeButton, soundButton);
-    document.body.appendChild(controls);
+    nav.addEventListener("click", event => {
+      const navButton = event.target.closest("[data-page]");
+
+      if (navButton) {
+        nav.classList.remove("open");
+
+        menuToggle.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
+        menuToggle.setAttribute(
+          "aria-label",
+          "Open navigation menu"
+        );
+      }
+    });
 
     document.addEventListener("click", event => {
       if (
-        !themePanel.contains(event.target) &&
-        !soundPanel.contains(event.target) &&
-        !controls.contains(event.target)
+        !nav.contains(event.target) &&
+        !menuToggle.contains(event.target)
       ) {
-        themePanel.hidden = true;
-        soundPanel.hidden = true;
+        nav.classList.remove("open");
+
+        menuToggle.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
+        menuToggle.setAttribute(
+          "aria-label",
+          "Open navigation menu"
+        );
       }
     });
-  }
-
-  function setupNavigation() {
-    const menuToggle = $("#menuToggle");
-    const nav = $(".nav");
-
-    if (menuToggle && nav) {
-      menuToggle.addEventListener("click", () => {
-        nav.classList.toggle("open");
-        sounds.click();
-      });
-    }
 
     document.addEventListener("click", event => {
-      const navButton = event.target.closest("[data-page]");
       const goButton = event.target.closest("[data-go]");
+      const navButton = event.target.closest("[data-page]");
 
-      if (navButton || goButton) {
-        const destination = navButton
-          ? navButton.dataset.page
-          : goButton.dataset.go;
+      if (goButton || navButton) {
+        nav.classList.remove("open");
 
-        if (destination) {
-          sounds.tab();
+        menuToggle.setAttribute(
+          "aria-expanded",
+          "false"
+        );
 
-          if (nav) nav.classList.remove("open");
-        }
+        menuToggle.setAttribute(
+          "aria-label",
+          "Open navigation menu"
+        );
       }
     });
   }
+
+  /* ---------- GLOBAL BUTTON SOUNDS ---------- */
 
   function setupGlobalSounds() {
     document.addEventListener("click", event => {
@@ -369,7 +499,9 @@
       if (
         button.classList.contains("theme-option") ||
         button.id === "soundControl" ||
-        button.id === "menuToggle"
+        button.id === "menuToggle" ||
+        button.id === "settingsToggle" ||
+        button.classList.contains("menu-toggle")
       ) {
         return;
       }
@@ -399,9 +531,7 @@
         return;
       }
 
-      if (
-        button.dataset.surprise !== undefined
-      ) {
+      if (button.dataset.surprise !== undefined) {
         sounds.surprise();
         return;
       }
@@ -410,34 +540,63 @@
     });
   }
 
-  function initialize() {
-    applyTheme(localStorage.getItem(THEME_KEY) || "romantic-pink", false);
+  /* ---------- INITIALIZE ---------- */
 
-    buildFloatingControls();
+  function initialize() {
+    applyTheme(
+      localStorage.getItem(THEME_KEY) || "romantic-pink",
+      false
+    );
+
+    const settingsContent = buildSettingsContent();
+
     setupNavigation();
     setupGlobalSounds();
-
-    document.addEventListener("world:themechange", event => {
-      console.info("Theme changed:", event.detail.theme);
-    });
 
     window.WorldAppearance = {
       applyTheme,
       showToast,
       sounds,
+      themes,
+
       get soundEnabled() {
         return soundEnabled;
       },
+
       get volume() {
         return volume;
-      }
+      },
+
+      updateSoundSettings
     };
 
-    console.log("Sharmila's Little World appearance ready ♡");
+    /* Let floating-controls.js receive the settings section */
+
+    document.dispatchEvent(
+      new CustomEvent("world:appearance-ready", {
+        detail: {
+          settingsContent
+        }
+      })
+    );
+
+    document.addEventListener("world:themechange", event => {
+      console.info(
+        "Theme changed:",
+        event.detail.theme
+      );
+    });
+
+    console.log(
+      "Sharmila's Little World appearance ready ♡"
+    );
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initialize);
+    document.addEventListener(
+      "DOMContentLoaded",
+      initialize
+    );
   } else {
     initialize();
   }

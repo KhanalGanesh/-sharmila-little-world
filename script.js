@@ -69,23 +69,28 @@ function navigate(id){
     btn.classList.toggle("active",btn.dataset.page===id);
   });
 
-  document.querySelector(".nav").classList.remove("open");
+  document.querySelector(".nav")?.classList.remove("open");
+
   window.scrollTo({top:0,behavior:"smooth"});
 
   if(id==="share") renderShare();
 }
 
 document.querySelectorAll("[data-page]").forEach(el=>{
-  el.addEventListener("click",()=>navigate(el.dataset.page));
+  el.addEventListener("click",()=>{
+    navigate(el.dataset.page);
+  });
 });
 
 document.querySelectorAll("[data-go]").forEach(el=>{
-  el.addEventListener("click",()=>navigate(el.dataset.go));
+  el.addEventListener("click",()=>{
+    navigate(el.dataset.go);
+  });
 });
 
-document.getElementById("menuToggle").addEventListener("click",()=>{
-  document.querySelector(".nav").classList.toggle("open");
-});
+/* MENU TOGGLE REMOVED HERE
+   appearance.js now controls the mobile menu.
+*/
 
 document.getElementById("openShare").addEventListener("click",()=>{
   navigate("share");
@@ -118,6 +123,7 @@ function renderFields(id){
   host.querySelectorAll("input").forEach(input=>{
     input.addEventListener("change",()=>{
       const groupIndex=Number(input.name.split("-").pop());
+
       const checkedInputs=[...host.querySelectorAll(
         `input[name="${id}-${groupIndex}"]:checked`
       )];
@@ -138,6 +144,7 @@ function collectAnswers(id){
       `#${id}Fields input[name="${id}-${gi}"]:checked`
     )].map(input=>input.value);
   });
+
   saveState();
 }
 
@@ -207,7 +214,9 @@ function showResult(id){
 }
 
 document.querySelectorAll("[data-result]").forEach(btn=>{
-  btn.addEventListener("click",()=>showResult(btn.dataset.result));
+  btn.addEventListener("click",()=>{
+    showResult(btn.dataset.result);
+  });
 });
 
 function resetSection(id){
@@ -227,7 +236,9 @@ function resetSection(id){
 }
 
 document.querySelectorAll("[data-reset]").forEach(btn=>{
-  btn.addEventListener("click",()=>resetSection(btn.dataset.reset));
+  btn.addEventListener("click",()=>{
+    resetSection(btn.dataset.reset);
+  });
 });
 
 /* SHARE CHECKBOXES */
@@ -258,6 +269,7 @@ function renderMemories(){
   host.querySelectorAll("[data-delete-memory]").forEach(btn=>{
     btn.addEventListener("click",()=>{
       const index=Number(btn.dataset.deleteMemory);
+
       if(confirm("Are you sure you want to delete this memory?")){
         state.memories.splice(index,1);
         saveState();
@@ -296,6 +308,7 @@ document.querySelectorAll("[data-mood]").forEach(btn=>{
 
   btn.addEventListener("click",()=>{
     selectedMood=btn.dataset.mood;
+
     document.querySelectorAll("[data-mood]").forEach(item=>{
       item.classList.toggle("selected",item===btn);
     });
@@ -316,6 +329,7 @@ function renderDiary(){
   host.querySelectorAll("[data-delete-diary]").forEach(btn=>{
     btn.addEventListener("click",()=>{
       const index=Number(btn.dataset.deleteDiary);
+
       if(confirm("Delete this private diary entry?")){
         state.diary.splice(index,1);
         saveState();

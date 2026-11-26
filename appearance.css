@@ -111,9 +111,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
-  transition:
-    background 0.35s ease,
-    color 0.35s ease;
+  transition: background 0.35s ease, color 0.35s ease;
 }
 
 button,
@@ -142,7 +140,7 @@ a {
 .topbar {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -182,6 +180,7 @@ a {
 
 .nav {
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
   gap: 5px;
@@ -218,6 +217,7 @@ a {
 
 .menu-toggle {
   display: none;
+  flex-shrink: 0;
   padding: 8px 12px;
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -759,13 +759,8 @@ a {
 }
 
 @keyframes gentleFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-9px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
 }
 
 .surprise-wrap h2 {
@@ -835,7 +830,7 @@ body[data-theme="midnight-dark"] .form-card select {
   color-scheme: dark;
 }
 
-/* RESPONSIVE */
+/* TABLET */
 
 @media (max-width: 1000px) {
   .topbar {
@@ -852,38 +847,67 @@ body[data-theme="midnight-dark"] .form-card select {
   }
 }
 
+/* MOBILE */
+
 @media (max-width: 650px) {
   .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
     padding: 13px 5%;
+    overflow: visible;
   }
 
   .brand {
     font-size: 20px;
+    margin-right: auto;
   }
 
   .menu-toggle {
-    display: block;
-  }
-
-  .nav {
-    display: none;
-    align-items: stretch;
-    flex-direction: column;
-    gap: 4px;
-    padding: 12px 0;
-  }
-
-  .nav.open {
-    display: flex;
-  }
-
-  .nav-link {
-    width: 100%;
-    text-align: left;
+    display: block !important;
+    position: relative;
+    z-index: 10002;
   }
 
   .share-top {
-    margin-left: auto;
+    margin-left: 0;
+    padding: 8px 11px;
+    font-size: 10px;
+  }
+
+  .nav {
+    display: none !important;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 10001;
+    width: 100%;
+    flex: none;
+    order: initial;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    padding: 12px 5% 18px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 12px 20px rgba(0,0,0,.08);
+  }
+
+  .nav.open {
+    display: flex !important;
+  }
+
+  .nav-link {
+    display: block;
+    width: 100%;
+    padding: 13px 15px;
+    text-align: left;
   }
 
   .shell {
@@ -961,10 +985,5 @@ body[data-theme="midnight-dark"] .form-card select {
 @media (max-width: 370px) {
   .feature-grid {
     grid-template-columns: 1fr;
-  }
-
-  .share-top {
-    padding: 8px 11px;
-    font-size: 10px;
   }
 }

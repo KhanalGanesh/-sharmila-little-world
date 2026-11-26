@@ -2,6 +2,7 @@
 /* =========================================
    SHARMILA'S LITTLE WORLD
    OUR LITTLE REMINDER ♡
+   UNIFIED SETTINGS VERSION
    AUTOMATIC + CHOOSE A TIME
    MESSENGER + INSTAGRAM
 ========================================= */
@@ -37,45 +38,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const style = document.createElement("style");
 
+  style.id = "ganeshReminderStyle";
+
   style.textContent = `
     #ganeshReminder {
-      position: fixed;
-      right: 82px;
-      bottom: 25px;
-      z-index: 99990;
+      position: static !important;
+      display: contents !important;
       font-family: Arial, sans-serif;
     }
 
+    #grBell {
+      display: none !important;
+    }
+
     #grPanel {
-      display: none;
-      position: absolute;
-      right: 0;
-      bottom: 65px;
-      width: 290px;
-      padding: 17px;
-      border-radius: 18px;
-      background: #fff7fb;
-      border: 1px solid #f3c5d8;
-      box-shadow: 0 8px 30px rgba(160,70,110,.18);
+      display: block;
+      position: static !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 14px 0 0 !important;
+      margin: 12px 0 0 !important;
+      border: 0 !important;
+      border-top: 1px solid #f3c5d8 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
       color: #70445a;
       box-sizing: border-box;
     }
 
-    #grPanel.gr-show {
-      display: block;
-      animation: grAppear .2s ease;
-    }
-
     #grPanel h3 {
-      margin: 0 0 12px;
-      font-size: 16px;
+      margin: 0 0 8px;
+      font-size: 15px;
       color: #d65b91;
     }
 
     #grPanel p {
       font-size: 12px;
       line-height: 1.5;
-      margin: 0 0 12px;
+      margin: 0 0 10px;
     }
 
     .gr-option {
@@ -155,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
       background: #fff7fb;
       border: 1px solid #f2bfd4;
       box-shadow: 0 8px 30px rgba(160,70,110,.2);
-      z-index: 99999;
+      z-index: 1000001;
       color: #70445a;
       text-align: center;
       box-sizing: border-box;
@@ -237,14 +238,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     @media(max-width: 600px) {
-      #grPanel {
-        width: 270px;
-        right: -5px;
-      }
-
       #grPopup {
-        width: 250px;
-        right: 0;
+        width: min(250px, calc(100vw - 85px));
+        right: 66px;
         bottom: 90px;
       }
     }
@@ -260,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
   wrapper.innerHTML = `
     <div id="grPanel">
 
-      <h3>Our Little Reminder ♡</h3>
+      <h3>🔔 Our Little Reminder ♡</h3>
       <p>A little reminder to make her smile 💗</p>
 
       <label class="gr-option">
@@ -274,6 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </label>
 
       <div id="grTimeBox">
+
         <label>Reminder type</label>
         <select id="grRepeat">
           <option value="daily">Every day</option>
@@ -289,6 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <button class="gr-save" id="grSaveTime">
           Save Reminder ♡
         </button>
+
       </div>
 
       <button class="gr-off" id="grTurnOff">
@@ -348,12 +346,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function playReminderSound() {
     try {
-      const AudioContext =
+      const AudioClass =
         window.AudioContext || window.webkitAudioContext;
 
-      if (!AudioContext) return;
+      if (!AudioClass) return;
 
-      const audio = new AudioContext();
+      const audio = new AudioClass();
 
       [523.25, 659.25, 783.99].forEach((frequency, index) => {
         const oscillator = audio.createOscillator();
@@ -378,7 +376,9 @@ document.addEventListener("DOMContentLoaded", () => {
         gain.connect(audio.destination);
 
         oscillator.start(audio.currentTime + index * 0.12);
-        oscillator.stop(audio.currentTime + 0.6 + index * 0.12);
+        oscillator.stop(
+          audio.currentTime + 0.6 + index * 0.12
+        );
       });
 
       setTimeout(() => audio.close(), 1500);
@@ -388,7 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* ---------- POPUP ---------- */
+  /* ---------- NOTIFICATION POPUP ---------- */
 
   function closePopup() {
     popup.classList.remove("gr-show");
@@ -405,7 +405,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const randomMessage =
       messages[Math.floor(Math.random() * messages.length)];
 
-    document.getElementById("grMessage").textContent = randomMessage;
+    document.getElementById("grMessage").textContent =
+      randomMessage;
 
     popup.classList.add("gr-show");
 
@@ -416,40 +417,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 5000);
   }
 
-  /* ---------- PANEL ---------- */
+  /* ---------- MODE UI ---------- */
 
-  function closePanel() {
-    panel.classList.remove("gr-show");
+  function updateModeUI() {
+    document.querySelectorAll(
+      'input[name="grMode"]'
+    ).forEach(input => {
+      input.checked = input.value === mode;
+    });
+
+    timeBox.classList.toggle(
+      "gr-visible",
+      mode === "time"
+    );
   }
-
-  function togglePanel() {
-    panel.classList.toggle("gr-show");
-    closePopup();
-  }
-
-  /* ---------- BELL BUTTON ---------- */
-
-  const bell = document.createElement("button");
-
-  bell.id = "grBell";
-  bell.type = "button";
-  bell.innerHTML = "🔔";
-  bell.title = "Reminder settings";
-
-  bell.style.cssText = `
-    width: 52px;
-    height: 52px;
-    border: none;
-    border-radius: 50%;
-    background: #f7d3e2;
-    font-size: 22px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,.12);
-  `;
-
-  wrapper.appendChild(bell);
-
-  bell.addEventListener("click", togglePanel);
 
   /* ---------- AUTOMATIC REMINDERS ---------- */
 
@@ -465,14 +446,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (mode !== "auto") return;
 
-    const savedNext = Number(localStorage.getItem(NEXT_KEY));
+    const savedNext = Number(
+      localStorage.getItem(NEXT_KEY)
+    );
+
     const now = Date.now();
 
     let nextTime = savedNext;
 
     if (!nextTime || nextTime <= now) {
       nextTime = now + (2 + Math.random()) * 60 * 1000;
-      localStorage.setItem(NEXT_KEY, String(nextTime));
+
+      localStorage.setItem(
+        NEXT_KEY,
+        String(nextTime)
+      );
     }
 
     autoTimer = setTimeout(() => {
@@ -480,7 +468,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       showReminder();
 
-      const nextDelay = (2 + Math.random()) * 60 * 1000;
+      const nextDelay =
+        (2 + Math.random()) * 60 * 1000;
 
       localStorage.setItem(
         NEXT_KEY,
@@ -498,6 +487,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (mode !== "time") return;
 
     const saved = localStorage.getItem(TIME_KEY);
+
     if (!saved) return;
 
     let reminder;
@@ -511,6 +501,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!reminder.date || !reminder.time) return;
 
     const now = new Date();
+
     const target = new Date(
       reminder.date + "T" + reminder.time
     );
@@ -521,7 +512,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (reminder.repeat === "daily") {
       const tomorrow = new Date(target);
-      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      tomorrow.setDate(
+        tomorrow.getDate() + 1
+      );
 
       reminder.date = [
         tomorrow.getFullYear(),
@@ -538,23 +532,18 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.removeItem(TIME_KEY);
 
       mode = "off";
+
       localStorage.setItem(MODE_KEY, mode);
 
       updateModeUI();
     }
   }
 
-  /* ---------- MODE SETTINGS ---------- */
+  /* ---------- MODE CHANGE ---------- */
 
-  function updateModeUI() {
-    document.querySelectorAll('input[name="grMode"]').forEach(input => {
-      input.checked = input.value === mode;
-    });
-
-    timeBox.classList.toggle("gr-visible", mode === "time");
-  }
-
-  document.querySelectorAll('input[name="grMode"]').forEach(input => {
+  document.querySelectorAll(
+    'input[name="grMode"]'
+  ).forEach(input => {
     input.addEventListener("change", () => {
       mode = input.value;
 
@@ -578,9 +567,14 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("grSaveTime")
     .addEventListener("click", () => {
 
-      const repeat = document.getElementById("grRepeat").value;
-      const date = document.getElementById("grDate").value;
-      const time = document.getElementById("grTime").value;
+      const repeat =
+        document.getElementById("grRepeat").value;
+
+      const date =
+        document.getElementById("grDate").value;
+
+      const time =
+        document.getElementById("grTime").value;
 
       if (!date || !time) {
         alert("Please choose a date and time ♡");
@@ -600,15 +594,22 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       mode = "time";
+
       localStorage.setItem(MODE_KEY, mode);
 
       clearAutoTimer();
+
       localStorage.removeItem(NEXT_KEY);
 
       updateModeUI();
-      closePanel();
 
-      alert("Your reminder has been saved! ♡");
+      if (window.WorldAppearance) {
+        window.WorldAppearance.showToast(
+          "Your reminder has been saved! ♡"
+        );
+      } else {
+        alert("Your reminder has been saved! ♡");
+      }
     });
 
   /* ---------- TURN OFF ---------- */
@@ -619,14 +620,20 @@ document.addEventListener("DOMContentLoaded", () => {
       mode = "off";
 
       localStorage.setItem(MODE_KEY, mode);
+
       localStorage.removeItem(TIME_KEY);
       localStorage.removeItem(NEXT_KEY);
 
       clearAutoTimer();
       closePopup();
-      closePanel();
 
       updateModeUI();
+
+      if (window.WorldAppearance) {
+        window.WorldAppearance.showToast(
+          "Reminders turned off ♡"
+        );
+      }
     });
 
   /* ---------- LATER ---------- */
@@ -634,27 +641,32 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("grLater")
     .addEventListener("click", closePopup);
 
-  /* ---------- CLOSE WHEN CLICKING OUTSIDE ---------- */
+  /* ---------- REMINDER SETTINGS API ---------- */
 
-  document.addEventListener("pointerdown", (event) => {
+  window.WorldReminder = {
+    panel,
 
-    const clickedPanel = event.target.closest("#grPanel");
-    const clickedBell = event.target.closest("#grBell");
-    const clickedPopup = event.target.closest("#grPopup");
+    showReminder,
+    closePopup,
 
-    if (!clickedPanel && !clickedBell) {
-      closePanel();
+    get mode() {
+      return mode;
     }
+  };
 
-    if (!clickedPopup) {
-      closePopup();
-    }
-  });
+  document.dispatchEvent(
+    new CustomEvent("world:reminder-ready", {
+      detail: {
+        panel
+      }
+    })
+  );
 
   /* ---------- RESTORE SAVED SETTINGS ---------- */
 
   if (!localStorage.getItem(MODE_KEY)) {
     mode = "auto";
+
     localStorage.setItem(MODE_KEY, mode);
   }
 
@@ -687,5 +699,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* Check scheduled reminders every 10 seconds */
 
   setInterval(checkScheduledReminder, 10000);
+
+  console.log("Unified reminder settings ready ♡");
 
 });
