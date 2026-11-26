@@ -467,142 +467,244 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =====================================
-     FASHION - NEPALI PREMIUM COLLECTIONS
-  ===================================== */
+  /* 
+/* =====================================
+   FASHION - NEPALI PREMIUM COLLECTIONS
+===================================== */
 
-  const fashionPage = $("fashion");
+const fashionPage = $("fashion");
 
-  if (fashionPage && !$("nepaliFashionStudio")) {
+if (fashionPage && !$("nepaliFashionStudio")) {
 
-    const fashion = document.createElement("div");
-    fashion.id = "nepaliFashionStudio";
-    fashion.className = "dynamic-section";
+  const fashion = document.createElement("div");
+  fashion.id = "nepaliFashionStudio";
+  fashion.className = "dynamic-section";
 
-    const nepaliBrands = [
-      {
-        name: "Traditional Alley",
-        type: "Premium Nepali Ethnic Wear",
-        description: "Kurtha, lehenga, saree sets, modern ethnic outfits and Dhaka collections.",
-        url: "https://traditionalalley.com.np/",
-        emoji: "🌸"
-      },
-      {
-        name: "Kshitiza Fashion House",
-        type: "Designer Couture",
-        description: "Elegant traditional wear, bridal collections and special occasion outfits.",
-        url: "https://kshitizafashion.com.np/",
-        emoji: "👑"
-      },
-      {
-        name: "PurbeliDhaka",
-        type: "Authentic Dhaka Fashion",
-        description: "Dhaka shawls, traditional dresses, Newari clothing and cultural designs.",
-        url: "https://www.purbelidhaka.com/",
-        emoji: "🧵"
-      },
-      {
-        name: "PALASH",
-        type: "Premium Boutique Fashion",
-        description: "Saree sets, bridal couture, dresses and custom designs.",
-        url: "https://palash.com.np/",
-        emoji: "💗"
-      },
-      {
-        name: "Nepali Heritage Wear",
-        type: "Traditional Clothing",
-        description: "Dhaka fabric, Haku Patasi, Gunyu Cholo and heritage-inspired outfits.",
-        url: "https://www.nepalicultural-fashion.com/",
-        emoji: "🇳🇵"
+  const nepaliBrands = [
+    {
+      name: "Kshitiza Fashion House",
+      type: "Designer & Ethnic Fashion",
+      description: "Lehengas, kurtis, bridal wear and modern traditional outfits.",
+      url: "https://kshitizafashion.com.np/",
+      emoji: "👑"
+    },
+    {
+      name: "PurbeliDhaka",
+      type: "Authentic Nepali Dhaka",
+      description: "Dhaka dresses, shawls, Newari wear and cultural collections.",
+      url: "https://www.purbelidhaka.com/",
+      emoji: "🧵"
+    },
+    {
+      name: "PALASH",
+      type: "Premium Boutique Fashion",
+      description: "Bridal couture, sarees, dresses and custom designs.",
+      url: "https://www.palash.com.np/",
+      emoji: "💗"
+    },
+    {
+      name: "Nivi Nepal",
+      type: "Premium Ethnic Wear",
+      description: "Sarees, kurtis, shirts and comfortable everyday collections.",
+      url: "https://nivinepal.com/",
+      emoji: "🌸"
+    },
+    {
+      name: "Sublime Attire Creation",
+      type: "Designer & Bridal Wear",
+      description: "Custom lehengas, sarees, Gunyu Choli and elegant ethnic outfits.",
+      url: "https://sublime.boutique/",
+      emoji: "✨"
+    },
+    {
+      name: "Abhinandan Saree Boutique",
+      type: "Saree & Designer Boutique",
+      description: "Discover a Kathmandu boutique listed for designer saree fashion.",
+      url: "https://citycentrenepal.com/stores/abhinandan/",
+      emoji: "🌷"
+    }
+  ];
+
+  const style = document.createElement("style");
+  style.id = "nepaliFashionCompactStyle";
+
+  style.textContent = `
+    #nepaliFashionStudio {
+      width: 100%;
+      margin-top: 22px;
+    }
+
+    #nepaliFashionStudio .np-heading {
+      text-align: center;
+      margin: 18px 0 12px;
+    }
+
+    #nepaliFashionStudio .np-heading h2 {
+      font-size: 19px;
+      margin-bottom: 5px;
+    }
+
+    #nepaliFashionStudio .np-heading p {
+      font-size: 11px;
+      color: #987f8b;
+    }
+
+    #nepaliFashionStudio .np-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    #nepaliFashionStudio .np-card {
+      min-width: 0;
+      padding: 12px 10px;
+      text-align: center;
+      border: 1px solid #f0dce5;
+      border-radius: 13px;
+      background: #fffafd;
+      box-shadow: 0 3px 12px rgba(120,60,85,.045);
+    }
+
+    #nepaliFashionStudio .np-emoji {
+      font-size: 23px;
+      margin-bottom: 5px;
+    }
+
+    #nepaliFashionStudio .np-card h3 {
+      font-size: 12px;
+      line-height: 1.4;
+      color: #87516a;
+      margin: 3px 0;
+    }
+
+    #nepaliFashionStudio .np-type {
+      font-size: 9px;
+      color: #c17d98;
+      font-weight: 700;
+      margin: 4px 0;
+    }
+
+    #nepaliFashionStudio .np-description {
+      font-size: 10px;
+      line-height: 1.5;
+      color: #907b85;
+      min-height: 42px;
+      margin: 5px 0 9px;
+    }
+
+    #nepaliFashionStudio .np-link {
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 18px;
+      background: #f5e3eb;
+      color: #95536f;
+      text-decoration: none;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    #nepaliFashionStudio .np-link:hover {
+      background: #edcfdd;
+      transform: translateY(-1px);
+    }
+
+    @media(max-width: 350px) {
+      #nepaliFashionStudio .np-grid {
+        grid-template-columns: 1fr;
       }
-    ];
+    }
+  `;
 
-    fashion.innerHTML = `
-      <div class="dynamic-heading">
-        <p class="eyebrow">MADE WITH NEPALI ELEGANCE</p>
-        <h2>Her Nepali Fashion World 🇳🇵</h2>
-        <p>Traditional beauty meets modern premium style.</p>
+  if (!document.getElementById("nepaliFashionCompactStyle")) {
+    document.head.appendChild(style);
+  }
+
+  fashion.innerHTML = `
+    <div class="dynamic-heading">
+      <p class="eyebrow">MADE WITH NEPALI ELEGANCE</p>
+      <h2>Her Nepali Fashion World 🇳🇵</h2>
+      <p>Traditional beauty meets modern premium style.</p>
+    </div>
+
+    <div class="dynamic-card">
+      <div class="dynamic-card-content">
+        <h3>👗 Create Your Outfit</h3>
+        <p>Choose a style and occasion for your outfit inspiration.</p>
+
+        <label class="dynamic-label">Your style</label>
+        <select class="dynamic-select" id="outfitMood">
+          <option>Modern Nepali Elegance</option>
+          <option>Traditional Newari Style</option>
+          <option>Dhaka Modern Look</option>
+          <option>Elegant Saree Style</option>
+          <option>Soft Kurtha Look</option>
+          <option>Premium Party Wear</option>
+          <option>Minimal Ethnic Style</option>
+        </select>
+
+        <label class="dynamic-label">Occasion</label>
+        <select class="dynamic-select" id="outfitOccasion">
+          <option>Everyday</option>
+          <option>Festival</option>
+          <option>Wedding</option>
+          <option>Date Night</option>
+          <option>Party</option>
+          <option>Family Celebration</option>
+        </select>
+
+        <button class="dynamic-btn" id="createOutfit" type="button">
+          Create My Look ✨
+        </button>
+
+        <div id="outfitResult"></div>
       </div>
+    </div>
 
-      <div class="dynamic-card">
-        <div class="dynamic-card-content">
-          <h3>👗 Create Your Outfit</h3>
-          <p>Choose a style and occasion for your outfit inspiration.</p>
+    <div class="np-heading">
+      <h2>🇳🇵 Nepali Fashion Stores</h2>
+      <p>Explore beautiful Nepali fashion collections.</p>
+    </div>
 
-          <label class="dynamic-label">Your style</label>
-          <select class="dynamic-select" id="outfitMood">
-            <option>Modern Nepali Elegance</option>
-            <option>Traditional Newari Style</option>
-            <option>Dhaka Modern Look</option>
-            <option>Elegant Saree Style</option>
-            <option>Soft Kurtha Look</option>
-            <option>Premium Party Wear</option>
-            <option>Minimal Ethnic Style</option>
-          </select>
+    <div class="np-grid">
+      ${nepaliBrands.map(brand => `
+        <article class="np-card">
+          <div class="np-emoji">${brand.emoji}</div>
+          <h3>${esc(brand.name)}</h3>
+          <p class="np-type">${esc(brand.type)}</p>
+          <p class="np-description">${esc(brand.description)}</p>
+          <a class="np-link"
+             href="${esc(brand.url)}"
+             target="_blank"
+             rel="noopener noreferrer">
+            Explore Store ↗
+          </a>
+        </article>
+      `).join("")}
+    </div>
+  `;
 
-          <label class="dynamic-label">Occasion</label>
-          <select class="dynamic-select" id="outfitOccasion">
-            <option>Everyday</option>
-            <option>Festival</option>
-            <option>Wedding</option>
-            <option>Date Night</option>
-            <option>Party</option>
-            <option>Family Celebration</option>
-          </select>
+  fashionPage.appendChild(fashion);
 
-          <button class="dynamic-btn" id="createOutfit" type="button">
-            Create My Look ✨
-          </button>
+  $("createOutfit").addEventListener("click", () => {
 
-          <div id="outfitResult"></div>
-        </div>
-      </div>
+    const mood = $("outfitMood").value;
+    const occasion = $("outfitOccasion").value;
 
-      <div class="dynamic-heading">
-        <h2>Premium Nepali Collections</h2>
-        <p>Explore these Nepali fashion stores and designers.</p>
-      </div>
-
-      <div class="dynamic-grid">
-        ${nepaliBrands.map(brand => `
-          <article class="dynamic-card nepali-fashion-card">
-            <div class="dynamic-card-content">
-              <div class="nepali-fashion-emoji">${brand.emoji}</div>
-              <h3>${brand.name}</h3>
-              <p class="nepali-fashion-type">${brand.type}</p>
-              <p>${brand.description}</p>
-              <a class="dynamic-btn" href="${brand.url}"
-                 target="_blank" rel="noopener">
-                Explore Collection ↗
-              </a>
-            </div>
-          </article>
-        `).join("")}
+    $("outfitResult").innerHTML = `
+      <div class="dynamic-result">
+        <p class="eyebrow">YOUR STYLE IDEA ♡</p>
+        <h3>${esc(mood)}</h3>
+        <p>A beautiful outfit idea for: ${esc(occasion)}</p>
+        <a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(mood + " " + occasion + " Nepali outfit")}"
+           target="_blank" rel="noopener">
+          See outfit inspiration ↗
+        </a>
       </div>
     `;
 
-    fashionPage.appendChild(fashion);
-
-    $("createOutfit").addEventListener("click", () => {
-
-      const mood = $("outfitMood").value;
-      const occasion = $("outfitOccasion").value;
-
-      $("outfitResult").innerHTML = `
-        <div class="dynamic-result">
-          <p class="eyebrow">YOUR STYLE IDEA ♡</p>
-          <h3>${esc(mood)}</h3>
-          <p>A beautiful outfit idea for: ${esc(occasion)}</p>
-          <a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(mood + " " + occasion + " Nepali outfit")}"
-             target="_blank" rel="noopener">
-            See outfit inspiration ↗
-          </a>
-        </div>
-      `;
-
-      playNepaliMelody();
-    });
-  }
+    playNepaliMelody();
+  });
+}
 
   /* =====================================
      MUSIC - APPLE SEARCH
